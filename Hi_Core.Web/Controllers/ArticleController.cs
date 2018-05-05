@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Hi_Core.Services;
 using Hi_Core.Repositories;
 using Newtonsoft.Json;
+using System.Linq.Expressions;
 
 namespace Hi_Core.Web.Controllers
 {
@@ -24,59 +25,11 @@ namespace Hi_Core.Web.Controllers
         }
 
         #region ==获取JQGrid列表==
-        public IActionResult GetJQGridJson(int page, int rows)
+        public IActionResult GetJQGridJson(Hi_Core.Domain.Pagination pagination, string queryJson = "")
         {
-            var data = _articleService.FindPagedList(null, "Aid", page);
-            return Content(JsonConvert.SerializeObject(new { page = page, total = data.total, records = data.records, rows = data }));
+            var data = _articleService.FindPagedList(m => m.Aid == 1, pagination.sidx + " " + pagination.sord, pagination.page, pagination.rows);
+            return Content(JsonConvert.SerializeObject(new { page = pagination.page, total = data.total, records = data.records, rows = data }));
         }
         #endregion
-    }
-
-    /// <summary>
-    /// 分页参数
-    /// </summary>
-    public class Pagination
-    {
-        /// <summary>
-        /// 每页行数
-        /// </summary>
-        public int rows { get; set; }
-        /// <summary>
-        /// 当前页
-        /// </summary>
-        public int page { get; set; }
-        /// <summary>
-        /// 排序列
-        /// </summary>
-        public string sidx { get; set; }
-        /// <summary>
-        /// 排序类型
-        /// </summary>
-        public string sord { get; set; }
-        /// <summary>
-        /// 总记录数
-        /// </summary>
-        public int records { get; set; }
-        /// <summary>
-        /// 总页数
-        /// </summary>
-        public int total
-        {
-            get
-            {
-                if (records > 0)
-                {
-                    return records % this.rows == 0 ? records / this.rows : records / this.rows + 1;
-                }
-                else
-                {
-                    return 0;
-                }
-            }
-        }
-        /// <summary>
-        /// 查询条件Json
-        /// </summary>
-        public string conditionJson { get; set; }
     }
 }
