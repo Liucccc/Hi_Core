@@ -1,0 +1,103 @@
+﻿@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1" />
+    <title>XXX-后台管理系统</title>
+    <meta name="keywords" content="XXX-后台管理系统" />
+    <meta name="description" content="XXX-后台管理系统" />
+    <link href="/Content/ui/css/layout.css" rel="stylesheet" />
+    <link href="/Content/ui/css/login.css" rel="stylesheet" />
+</head>
+
+<body class="login-bg">
+    <div class="main ">
+        <!--登录-->
+        <div class="login-dom login-max">
+            <div class="logo text-center">
+                <a href="#">
+                    <img src="/content/ui/img/logo.png" width="193px" height="96px" />
+                </a>
+            </div>
+            <div class="login container " id="login">
+                <p class="text-big text-center logo-color">
+                    XXX
+                </p>
+
+                <p class="text-center margin-small-top logo-color text-small">
+                    网站后台管理系统
+                </p>
+                <div class="login-form">
+                    <div class="login-box border text-small" id="box">
+                        <div class="name border-bottom">
+                            <input type="text" placeholder="用户名" id="username" name="username" value="admin" />
+                        </div>
+                        <div class="pwd">
+                            <input type="password" placeholder="密码" id="password" name="password" value="admin" />
+                        </div>
+                        <div id="msg" style="color:red;display:none;font-size:12px;">
+                        </div>
+                    </div>
+                    <input type="submit" id="login-btn" class="btn text-center login-btn" value="立即登录" />
+                </div>
+                <div class="forget">
+                    <a href="#" class="forget-pwd text-small fl"> 忘记登录密码？</a><a href="#" class="forget-new text-small fr" id="forget-new">注册账号</a>
+                </div>
+            </div>
+        </div>
+        <div class="footer text-center text-small ie">
+            Copyright 2013-2016 版权所有 ©tzhsweet 2015-2018      <a href="#" target="_blank">粤ICP备16024545号-1</a>
+        </div>
+    </div>
+</body>
+</html>
+
+<script src="/Content/ui/global/jQuery/jquery.min.js"></script>
+<script src="~/Content/supermgr/Base/js/common.js"></script>
+<script type="text/javascript">
+
+    $("body").keydown(function (e) { if (e.keyCode == 13) { $("#login-btn").click(); } });
+
+    $("#login-btn").click(function () {
+        var uname = $("#username").val();
+        var pwd = $("#password").val();
+        var reg = /^[0-9a-zA-Z\-]+$/;
+
+        if (uname.length == 0) {
+            $("#msg").show().html("请填写用户名！");
+            return;
+        } else if (!uname.match(reg)) {
+
+            $("#msg").show().html("用户名，只能输入数字、字母、-");
+            return;
+        } else if (pwd.length == 0) {
+
+            $("#msg").show().text("请填写帐号密码！");
+            return;
+        }
+        $btnsubmit = $(this);
+        $("#msg").hide().html("");
+        $.ajax({
+            type: "POST",
+            url: "/Account/Login?r=" + Math.random(),
+            data: { 'userName': uname, 'userPwd': pwd },
+            success: function (data) {
+                if (data.type == 1) {
+                    window.location.href = "/Home/Index";
+                }
+                else {
+                    $("#msg").show().html(data.message);
+                    return;
+                }
+            },
+            error: function () {
+                $("#msg").show().text("登录超时!");
+            }
+        });
+    });
+</script>
+

@@ -1,0 +1,247 @@
+﻿
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Index.cshtml";
+}
+
+<div class="center-Panel" style="overflow-x: hidden">
+    <div class="panel panel-default">
+        <div class="panel-body">
+            <label class="control-label  col-sm-1">标题</label>
+            <div class="col-sm-3">
+                <input type="text" id="s_Keywords" class="form-control" placeholder="标题/来源/作者">
+            </div>
+            <label class="control-label col-sm-1">提交日期提交日期</label>
+            <div class="col-sm-3">
+                @*@Html.DaterangePicker("s_d1")*@
+                <input type="text" class="form-control" id="txt_search_username">
+            </div>
+            <label class="control-label  col-sm-1">用户名称</label>
+            <div class="col-sm-3">
+                <input type="text" class="form-control" id="txt_search_username">
+            </div>
+            <label class="control-label  col-sm-1">用户名称</label>
+            <div class="col-sm-3">
+                <input type="text" class="form-control" id="txt_search_username">
+            </div>
+            <label class="control-label  col-sm-1">用户名称</label>
+            <div class="col-sm-3">
+                <input type="text" class="form-control" id="txt_search_username">
+            </div>
+            <label class="control-label  col-sm-1">用户名称</label>
+            <div class="col-sm-3">
+                <input type="text" class="form-control" id="txt_search_username">
+            </div>
+            <label class="control-label  col-sm-1">用户名称</label>
+            <div class="col-sm-3">
+                <input type="text" class="form-control" id="txt_search_username">
+            </div>
+            <label class="control-label  col-sm-1">用户名称</label>
+            <div class="col-sm-3">
+                <input type="text" class="form-control" id="txt_search_username">
+            </div>
+            <div class="col-sm-4 text-right">
+                <a id="btn_Search" class="btn btn-primary lr-search"><i class="fa fa-search "></i>&nbsp;查询</a>
+            </div>
+        </div>
+    </div>
+    <div class="toolbar">
+        <a class="btn btn-default lr-replace" id="lr-replace" onclick="reload()"><i class="fa fa-refresh"></i>&nbsp;刷新</a>
+        <a class="btn btn-default lr-Add" id="lr-Add" onclick="Add()"><i class="fa fa-plus"></i>&nbsp;新增</a>
+        <a class="btn btn-default lr-Edit" id="lr-Edit" onclick="Edit()"><i class="fa fa-pencil-square-o"></i>&nbsp;编辑</a>
+        <a class="btn btn-default lr-Del" id="lr-replace" onclick="Del()"><i class="fa fa-remove"></i>&nbsp;删除</a>
+        <a class="btn btn-default lr-Hot" id="lr-replace" onclick="Hot()"><i class="fa fa-plus"></i>&nbsp;热点</a>
+        <a class="btn btn-default lr-Recommond" id="lr-replace" onclick="Recommond()"><i class="fa fa-trash-o"></i>&nbsp;推荐</a>
+        <a class="btn btn-default lr-Alive" id="lr-replace" onclick="Alive()"><i class="fa fa-trash-o"></i>&nbsp;屏蔽</a>
+        <a class="btn btn-default lr-Layer" id="lr-replace" onclick="Layer()"><i class="fa fa-trash-o"></i>&nbsp;更改序号</a>
+    </div>
+</div>
+<div class="gridPanel">
+    <table id="gridTable"></table>
+    <div id="gridPager" class="gridPager"></div>
+</div>
+
+<script>
+    $(function () {
+        loadGrid();
+        //查询事件
+        $("#btn_Search").click(function () {
+            var queryJson = $(".title-search").GetWebControls();
+            $("#gridTable").jqGrid('setGridParam', {
+                postData: { queryJson: JSON.stringify(queryJson) },
+                page: 1
+            }).trigger('reloadGrid');
+        });
+    });
+    function loadGrid() {
+        //初始化
+        $(window).resize(function (e) {
+            window.setTimeout(function () {
+
+                $('#gridTable').setGridWidth(($('.gridPanel').width()));
+                $("#gridTable").setGridHeight($.fn.getGridHeight(true));
+
+            }, 100);
+            e.stopPropagation();
+        });
+        var selectedRowIndex = 0;
+        $gridTable = $("#gridTable");
+        $gridTable.jqGrid({
+            datatype: "json",
+            mtype: "POST",
+            url: "/Article/GetJQGridJson",
+            postData: { Ostatus: 0, s_hot: 0, s_recommend: 0, d1: "", d2: "", searchText: "", Kind: 51, Asid: "" },
+            height: $.fn.getGridHeight(true),
+            autowidth: true,
+            colModel: [
+                { label: "主键", name: "Aid", hidden: true },
+
+                { label: "标题", name: "Atitle", index: "Atitle", width: 300, align: "left" },
+                { label: "链接", name: "Url", index: "Url", width: 200, align: "left" },
+                { label: "来源", name: "Source", index: "Source", width: 70, align: "left" },
+                { label: "作者", name: "Author", index: "Author", width: 100, align: "center" },
+                {
+                    label: "提交日期", name: "Atime", index: "Atime", width: 150, align: "center",
+                    formatter: function (cellvalue, options, rowObject) {
+                        return formatDate(cellvalue, 'yyyy-MM-dd hh:mm:ss');
+                    }
+                },
+                {
+                    label: "热点文章", name: "Hot", index: "Hot", width: 80, align: "center",
+                    formatter: function (cellvalue, options, rowObject) {
+                        return cellvalue ? "<span class='label label-success'>√</span>" : "<span class='label label-danger'>×</span>";
+                    }
+                },
+                {
+                    label: "推荐文章", name: "Recommend", index: "Recommend", width: 80, align: "center",
+                    formatter: function (cellvalue, options, rowObject) {
+                        return cellvalue ? "<span class='label label-success'>√</span>" : "<span class='label label-danger'>×</span>";
+                    }
+                },
+                {
+                    label: "有效", name: "Alive", index: "Alive", width: 80, align: "center",
+                    formatter: function (cellvalue, options, rowObject) {
+                        return cellvalue ? "<span class='label label-success'>√</span>" : "<span class='label label-danger'>×</span>";
+                    }
+                },
+
+
+            ],
+            pager: "#gridPager",
+            sortname: 'Aid',
+            rowList: [10, 20, 50, 100, 500, 1000],
+            rowNum: "10",
+            sortorder: "desc",
+            rownumbers: true,
+            onSelectRow: function () {
+                selectedRowIndex = $("#" + this.id).getGridParam('selrow');
+            },
+            gridComplete: function () {
+                $("#" + this.id).setSelection(selectedRowIndex, false);
+            }
+        });
+    }
+
+    //新增
+    function Add() {
+        $.fn.modalOpen({
+            id: "jobDetailForm",
+            title: '添加离婚知识',
+            url: '/Article/Add?k=1',
+            width: "750px",
+            height: "550px",
+            callBack: function (iframeId) {
+                top.frames[iframeId].AcceptClick();
+            }
+        });
+    }
+    //编辑
+    function Edit() {
+        var keyValue = $("#gridTable").jqGridRowValue("Aid");
+        var taskName = $("#gridTable").jqGridRowValue("TaskName");
+        if (checkedRow(keyValue)) {
+            $.fn.modalOpen({
+                id: "jobDetailForm",
+                title: '编辑【' + taskName + '】任务',
+                url: '/pages/supermgr/JobDetailForm.html?keyValue=' + keyValue,
+                width: "750px",
+                height: "550px",
+                callBack: function (iframeId) {
+                    top.frames[iframeId].AcceptClick();
+                }
+            });
+        }
+    }
+    //删除
+    function Del() {
+        var keyValue = $("#gridTable").jqGridRowValue("Aid");
+        if (checkedRow(keyValue)) {
+            $.fn.confirmAjax({
+                msg: "注：您确定要【删除】该定时任务么？该删除操作会级联删除任务日志，请谨慎操作！",
+                url: "/SysMgr/SchedulerMgr/DeleteJobStatus",
+                param: { keyValue: keyValue },
+                success: function (data) {
+                    $("#gridTable").trigger("reloadGrid");
+                }
+            });
+        }
+    }
+    //热点
+    function Hot() {
+        var keyValue = $("#gridTable").jqGridRowValue("Aid");
+        if (checkedRow(keyValue)) {
+            $.fn.confirmAjax({
+                msg: "注：您确定要【删除】该定时任务么？该删除操作会级联删除任务日志，请谨慎操作！",
+                url: "/SysMgr/SchedulerMgr/DeleteJobStatus",
+                param: { keyValue: keyValue },
+                success: function (data) {
+                    $("#gridTable").trigger("reloadGrid");
+                }
+            });
+        }
+    }
+    //推荐
+    function Recommond() {
+        var keyValue = $("#gridTable").jqGridRowValue("Aid");
+        if (checkedRow(keyValue)) {
+            $.fn.confirmAjax({
+                msg: "注：您确定要【删除】该定时任务么？该删除操作会级联删除任务日志，请谨慎操作！",
+                url: "/SysMgr/SchedulerMgr/DeleteJobStatus",
+                param: { keyValue: keyValue },
+                success: function (data) {
+                    $("#gridTable").trigger("reloadGrid");
+                }
+            });
+        }
+    }
+    //屏蔽
+    function Alive() {
+        var keyValue = $("#gridTable").jqGridRowValue("Aid");
+        if (checkedRow(keyValue)) {
+            $.fn.confirmAjax({
+                msg: "注：您确定要【删除】该定时任务么？该删除操作会级联删除任务日志，请谨慎操作！",
+                url: "/SysMgr/SchedulerMgr/DeleteJobStatus",
+                param: { keyValue: keyValue },
+                success: function (data) {
+                    $("#gridTable").trigger("reloadGrid");
+                }
+            });
+        }
+    }
+    //更改序号
+    function Layer() {
+        var keyValue = $("#gridTable").jqGridRowValue("Aid");
+        if (checkedRow(keyValue)) {
+            $.fn.confirmAjax({
+                msg: "注：您确定要【删除】该定时任务么？该删除操作会级联删除任务日志，请谨慎操作！",
+                url: "/SysMgr/SchedulerMgr/DeleteJobStatus",
+                param: { keyValue: keyValue },
+                success: function (data) {
+                    $("#gridTable").trigger("reloadGrid");
+                }
+            });
+        }
+    }
+</script>
+
+
