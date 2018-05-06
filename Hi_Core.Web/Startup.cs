@@ -26,6 +26,8 @@ namespace Hi_Core.Web
             services.AddMvc();
             services.AddTransient<IArticleRepository, ArticleRepository>();
             services.AddTransient<IArticleService, ArticleService>();
+            services.AddTransient<IArticleSortRepository, ArticleSortRepository>();
+            services.AddTransient<IArticleSortService, ArticleSortService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

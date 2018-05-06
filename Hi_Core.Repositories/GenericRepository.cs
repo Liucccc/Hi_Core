@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SqlSugar;
+using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;
 using System.Text;
@@ -168,7 +169,25 @@ namespace Hi_Core.Repositories
             using (var db = DbFactory.GetSqlSugarClient())
             {
                 var totalCount = 0;
-                var page = db.Queryable<T>().OrderBy(orderBy).ToPageList(pageIndex, pageSize, ref totalCount);
+                var page = db.Queryable<T>().Where(predicate).OrderBy(orderBy).ToPageList(pageIndex, pageSize, ref totalCount);
+                var list = new PagedList<T>(page, pageIndex, pageSize, totalCount);
+                return list;
+            }
+        }
+        /// <summary>
+        /// 根据条件查询分页数据
+        /// </summary>
+        /// <param name="predicate"></param>
+        /// <param name="orderBy"></param>
+        /// <param name="pageIndex">当前页面索引</param>
+        /// <param name="pageSize">分布大小</param>
+        /// <returns></returns>
+        public IPagedList<T> FindPagedList(string predicate = "", string orderBy = "", int pageIndex = 1, int pageSize = 20)
+        {
+            using (var db = DbFactory.GetSqlSugarClient())
+            {
+                var totalCount = 0;
+                var page = db.Queryable<T>().Where(" 1=1 " + predicate).OrderBy(orderBy).ToPageList(pageIndex, pageSize, ref totalCount);
                 var list = new PagedList<T>(page, pageIndex, pageSize, totalCount);
                 return list;
             }

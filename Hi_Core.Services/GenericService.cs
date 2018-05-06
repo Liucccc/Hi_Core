@@ -127,5 +127,18 @@ namespace Hi_Core.Services
         {
             return _repository.FindPagedList(predicate, orderBy, pageIndex, pageSize);
         }
+
+        /// <summary>
+        /// 根据条件查询分页数据
+        /// </summary>
+        /// <param name="predicate"></param>
+        /// <param name="orderBy"></param>
+        /// <param name="pageIndex">当前页面索引</param>
+        /// <param name="pageSize">分布大小</param>
+        /// <returns></returns>
+        public IPagedList<T> FindPagedList(string predicate, string orderBy = "", int pageIndex = 1, int pageSize = 20)
+        {
+            return _repository.FindPagedList(predicate, orderBy, pageIndex, pageSize);
+        }
     }
 }

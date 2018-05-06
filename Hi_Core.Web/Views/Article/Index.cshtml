@@ -9,17 +9,21 @@
         <div class="panel-body">
             <label class="control-label  col-sm-1">标题</label>
             <div class="col-sm-3">
-                <input type="text" id="s_Keywords" class="form-control" placeholder="标题/来源/作者">
+                <input type="text" id="Atitle" class="form-control" placeholder="标题/来源/作者">
             </div>
             <label class="control-label col-sm-1">提交日期</label>
             <div class="col-sm-3">
-                @*@Html.DaterangePicker("s_d1")*@
-                <input type="text" class="form-control" id="txt_search_username">
+                @Html.DatePicker("Atime")
             </div>
-            <label class="control-label  col-sm-1">用户名称</label>
-            <div class="col-sm-3">
-                <input type="text" class="form-control" id="txt_search_username">
-            </div>
+            @{
+                if (ViewBag.Kind == 5 || ViewBag.Kind == 6)
+                {
+                    <label class="control-label  col-sm-1">分类</label>
+                    <div class="col-sm-3">
+                        @Html.Multiselect("Asid", "/ArticleSort/GetListJson", "{}", "Asid", "Stitle", "==请选择==", true)
+                    </div>
+                }
+            }
             <div class="col-sm-4 text-right">
                 <a id="btn_Search" class="btn btn-primary lr-search"><i class="fa fa-search "></i>&nbsp;查询</a>
             </div>
@@ -46,7 +50,7 @@
         loadGrid();
         //查询事件
         $("#btn_Search").click(function () {
-            var queryJson = $(".title-search").GetWebControls();
+            var queryJson = $(".center-Panel").GetWebControls();
             $("#gridTable").jqGrid('setGridParam', {
                 postData: { queryJson: JSON.stringify(queryJson) },
                 page: 1
