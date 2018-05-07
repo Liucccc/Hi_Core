@@ -8,6 +8,23 @@ namespace Hi_Core.Web.Controllers
 {
     public class BaseController : Controller
     {
-        
+        /// <summary>
+        /// 返回成功消息
+        /// </summary>
+        /// <param name="message">消息</param>
+        /// <returns></returns>
+        protected virtual ActionResult Success(string message)
+        {
+            return Json(new { IsSucceeded = true, message = message });
+        }
+        /// <summary>
+        /// 返回失败消息
+        /// </summary>
+        /// <param name="message">消息</param>
+        /// <returns></returns>
+        protected virtual ActionResult Error(string message)
+        {
+            return Json(new { IsSucceeded = false, message = message });
+        }
     }
 }

@@ -6,7 +6,7 @@ using Hi_Core.Repositories;
 
 namespace Hi_Core.Services
 {
-    public class ArticleService: GenericService<Hi_Core_Article>, IArticleService
+    public class ArticleService: GenericService<ViewArticle>, IArticleService
     {
         private readonly IArticleRepository _repository;
         public ArticleService(IArticleRepository repository) : base(repository)

@@ -86,7 +86,7 @@ namespace Hi_Core.Repositories
         }
 
         /// <summary>
-        /// 更新实体数据
+        /// 更新实体数据（主键要有值，主键是更新条件）
         /// </summary>
         /// <param name="entity"></param>
         /// <returns></returns>
@@ -96,6 +96,21 @@ namespace Hi_Core.Repositories
             {
                 //这种方式会以主键为条件
                 var i = db.Updateable(entity).ExecuteCommand();
+                return i > 0;
+            }
+        }
+
+        /// <summary>
+        /// 更新实体数据，更新条件是根据表达式
+        /// </summary>
+        /// <param name="entity"></param>
+        /// <returns></returns>
+        public bool Update(T entity, Expression<Func<T, bool>> UpdateColumns, Expression<Func<T, bool>> where)
+        {
+            using (var db = DbFactory.GetSqlSugarClient())
+            {
+                //这种方式会以主键为条件
+                var i = db.Updateable<T>().UpdateColumns(entity).Where(where).ExecuteCommand();
                 return i > 0;
             }
         }

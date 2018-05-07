@@ -7,9 +7,9 @@ namespace Hi_Core.Domain.Entities
     ///<summary>
     ///
     ///</summary>
-    public partial class Hi_Core_Article
+    public partial class ViewArticle
     {
-           public Hi_Core_Article(){
+           public ViewArticle(){
 
 
            }
@@ -18,17 +18,17 @@ namespace Hi_Core.Domain.Entities
            /// Default:
            /// Nullable:False
            /// </summary>           
-           public long? Aid {get;set;}
+           public long Aid {get;set;}
 
            /// <summary>
-           /// Desc:标题
+           /// Desc:
            /// Default:
            /// Nullable:False
            /// </summary>           
            public string Atitle {get;set;}
 
            /// <summary>
-           /// Desc:链接文件地址
+           /// Desc:
            /// Default:
            /// Nullable:False
            /// </summary>           
@@ -49,56 +49,56 @@ namespace Hi_Core.Domain.Entities
            public string Author {get;set;}
 
            /// <summary>
-           /// Desc:有效
+           /// Desc:
            /// Default:
            /// Nullable:False
            /// </summary>           
            public bool Alive {get;set;}
 
            /// <summary>
-           /// Desc:栏目
+           /// Desc:
            /// Default:
            /// Nullable:False
            /// </summary>           
-           public short? Kind {get;set;}
+           public short Kind {get;set;}
 
            /// <summary>
-           /// Desc:序号
+           /// Desc:
            /// Default:
            /// Nullable:False
            /// </summary>           
-           public long? Layer {get;set;}
+           public long Layer {get;set;}
 
            /// <summary>
-           /// Desc:内容
+           /// Desc:
            /// Default:
            /// Nullable:False
            /// </summary>           
            public string Ainfo {get;set;}
 
            /// <summary>
-           /// Desc:提交日期
+           /// Desc:
            /// Default:
            /// Nullable:False
            /// </summary>           
-           public DateTime? Atime {get;set;}
+           public DateTime Atime {get;set;}
 
            /// <summary>
-           /// Desc:图片
+           /// Desc:
            /// Default:
            /// Nullable:False
            /// </summary>           
            public string Pic1 {get;set;}
 
            /// <summary>
-           /// Desc:缩略图
+           /// Desc:
            /// Default:
            /// Nullable:False
            /// </summary>           
            public string Pic2 {get;set;}
 
            /// <summary>
-           /// Desc:概述
+           /// Desc:
            /// Default:
            /// Nullable:False
            /// </summary>           
@@ -123,17 +123,17 @@ namespace Hi_Core.Domain.Entities
            /// Default:
            /// Nullable:False
            /// </summary>           
-           public long? Asid {get;set;}
+           public long Asid {get;set;}
 
            /// <summary>
-           /// Desc:副标题
+           /// Desc:
            /// Default:
            /// Nullable:False
            /// </summary>           
            public string ieTitle {get;set;}
 
            /// <summary>
-           /// Desc:关键字
+           /// Desc:
            /// Default:
            /// Nullable:False
            /// </summary>           
@@ -145,6 +145,13 @@ namespace Hi_Core.Domain.Entities
            /// Nullable:False
            /// </summary>           
            public string seoDescription {get;set;}
+
+           /// <summary>
+           /// Desc:
+           /// Default:
+           /// Nullable:True
+           /// </summary>           
+           public string Stitle {get;set;}
 
     }
 }

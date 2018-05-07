@@ -5,6 +5,7 @@
 }
 
 <div class="center-Panel" style="overflow-x: hidden">
+    <input type="hidden" id="Kind" value="@ViewBag.Kind">
     <div class="panel panel-default">
         <div class="panel-body">
             <label class="control-label  col-sm-1">标题</label>
@@ -24,6 +25,18 @@
                     </div>
                 }
             }
+            <label class="control-label col-sm-1"></label>
+            <div class="col-sm-3">
+                <input type="checkbox" id="Alive" /><label for="Alive">屏蔽</label>
+                @{
+                    if (ViewBag.Kind == 1 || ViewBag.Kind == 2 || ViewBag.Kind == 3 || ViewBag.Kind == 4 || ViewBag.Kind == 5 || ViewBag.Kind == 6 || ViewBag.Kind == 8)
+                    {
+
+                        <input type="checkbox" id="Hot" /><label for="Hot">热点文章</label>
+                        <input type="checkbox" id="Recommend" /><label for="Recommend">推荐文章</label>
+                    }
+                }
+            </div>
             <div class="col-sm-4 text-right">
                 <a id="btn_Search" class="btn btn-primary lr-search"><i class="fa fa-search "></i>&nbsp;查询</a>
             </div>
@@ -40,18 +53,19 @@
         <a class="btn btn-default lr-Layer" id="lr-replace" onclick="Layer()"><i class="fa fa-trash-o"></i>&nbsp;更改序号</a>
     </div>
 </div>
-<div class="gridPanel">
-    <table id="gridTable"></table>
-    <div id="gridPager" class="gridPager"></div>
-</div>
+@{
+    Hi_Core.Domain.JQGridModel m = Hi_Core.Web.Models.ArticleGrid.Index();
+    m.postData = new { queryJson = "{ Kind:" + ViewBag.Kind + "}" };
+    @Html.JQGrid(m);
+}
 
 <script>
     $(function () {
-        loadGrid();
+        //loadGrid();
         //查询事件
         $("#btn_Search").click(function () {
             var queryJson = $(".center-Panel").GetWebControls();
-            $("#gridTable").jqGrid('setGridParam', {
+            $("#Article_gridTable").jqGrid('setGridParam', {
                 postData: { queryJson: JSON.stringify(queryJson) },
                 page: 1
             }).trigger('reloadGrid');
@@ -63,13 +77,13 @@
             window.setTimeout(function () {
 
                 $('#gridTable').setGridWidth(($('.gridPanel').width()));
-                $("#gridTable").setGridHeight($.fn.getGridHeight(true));
+                $("#Article_gridTable").setGridHeight($.fn.getGridHeight(true));
 
             }, 100);
             e.stopPropagation();
         });
         var selectedRowIndex = 0;
-        $gridTable = $("#gridTable");
+        $gridTable = $("#Article_gridTable");
         $gridTable.jqGrid({
             datatype: "json",
             mtype: "POST",
@@ -79,7 +93,6 @@
             autowidth: true,
             colModel: [
                 { label: "主键", name: "Aid", hidden: true },
-
                 { label: "标题", name: "Atitle", index: "Atitle", width: 300, align: "left" },
                 { label: "链接", name: "Url", index: "Url", width: 200, align: "left" },
                 { label: "来源", name: "Source", index: "Source", width: 70, align: "left" },
@@ -141,8 +154,8 @@
     }
     //编辑
     function Edit() {
-        var keyValue = $("#gridTable").jqGridRowValue("Aid");
-        var taskName = $("#gridTable").jqGridRowValue("TaskName");
+        var keyValue = $("#Article_gridTable").jqGridRowValue("Aid");
+        var taskName = $("#Article_gridTable").jqGridRowValue("TaskName");
         if (checkedRow(keyValue)) {
             $.fn.modalOpen({
                 id: "jobDetailForm",
@@ -158,72 +171,86 @@
     }
     //删除
     function Del() {
-        var keyValue = $("#gridTable").jqGridRowValue("Aid");
+        var keyValue = $("#Article_gridTable").jqGridRowValue("Aid");
         if (checkedRow(keyValue)) {
             $.fn.confirmAjax({
                 msg: "注：您确定要【删除】该定时任务么？该删除操作会级联删除任务日志，请谨慎操作！",
                 url: "/SysMgr/SchedulerMgr/DeleteJobStatus",
                 param: { keyValue: keyValue },
                 success: function (data) {
-                    $("#gridTable").trigger("reloadGrid");
+                    $("#Article_gridTable").trigger("reloadGrid");
                 }
             });
         }
     }
     //热点
     function Hot() {
-        var keyValue = $("#gridTable").jqGridRowValue("Aid");
+        var keyValue = $("#Article_gridTable").jqGridRowValue("Aid");
         if (checkedRow(keyValue)) {
             $.fn.confirmAjax({
                 msg: "注：您确定要【删除】该定时任务么？该删除操作会级联删除任务日志，请谨慎操作！",
                 url: "/SysMgr/SchedulerMgr/DeleteJobStatus",
                 param: { keyValue: keyValue },
                 success: function (data) {
-                    $("#gridTable").trigger("reloadGrid");
+                    $("#Article_gridTable").trigger("reloadGrid");
                 }
             });
         }
     }
     //推荐
     function Recommond() {
-        var keyValue = $("#gridTable").jqGridRowValue("Aid");
+        var keyValue = $("#Article_gridTable").jqGridRowValue("Aid");
         if (checkedRow(keyValue)) {
             $.fn.confirmAjax({
                 msg: "注：您确定要【删除】该定时任务么？该删除操作会级联删除任务日志，请谨慎操作！",
                 url: "/SysMgr/SchedulerMgr/DeleteJobStatus",
                 param: { keyValue: keyValue },
                 success: function (data) {
-                    $("#gridTable").trigger("reloadGrid");
+                    $("#Article_gridTable").trigger("reloadGrid");
                 }
             });
         }
     }
     //屏蔽
     function Alive() {
-        var keyValue = $("#gridTable").jqGridRowValue("Aid");
-        if (checkedRow(keyValue)) {
-            $.fn.confirmAjax({
-                msg: "注：您确定要【删除】该定时任务么？该删除操作会级联删除任务日志，请谨慎操作！",
-                url: "/SysMgr/SchedulerMgr/DeleteJobStatus",
-                param: { keyValue: keyValue },
+        var id = $("#Article_gridTable").jqGridRowValue("Aid");
+        if (checkedRow(id)) {
+            $.fn.submitAjax({
+                target: "#Article_gridTable",
+                url: "/Article/Alive",
+                param: { id: id },
                 success: function (data) {
-                    $("#gridTable").trigger("reloadGrid");
+                    $("#Article_gridTable").trigger("reloadGrid");
                 }
             });
         }
     }
     //更改序号
     function Layer() {
-        var keyValue = $("#gridTable").jqGridRowValue("Aid");
+        var keyValue = $("#Article_gridTable").jqGridRowValue("Aid");
         if (checkedRow(keyValue)) {
             $.fn.confirmAjax({
                 msg: "注：您确定要【删除】该定时任务么？该删除操作会级联删除任务日志，请谨慎操作！",
                 url: "/SysMgr/SchedulerMgr/DeleteJobStatus",
                 param: { keyValue: keyValue },
                 success: function (data) {
-                    $("#gridTable").trigger("reloadGrid");
+                    $("#Article_gridTable").trigger("reloadGrid");
                 }
             });
+        }
+    }
+
+    //格式化显示状态
+    function showStatus(cel, row, opt) {
+        return cel ? "<span class='label label-success'>√</span>" : "<span class='label label-danger'>×</span>";
+    }
+
+    //格式化Pic1字段
+    function Pic1_formatter(cel, row, opt) {
+        if (cel != "") {
+            return '<a class="col"href="/' + cel + '" target="_blank">√</a>';
+        } else {
+            return '×';
         }
     }
 </script>

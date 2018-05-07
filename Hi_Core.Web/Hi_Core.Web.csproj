@@ -21,4 +21,45 @@
     <ProjectReference Include="..\Hi_Core.Services\Hi_Core.Services.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="wwwroot\UploadFile\temp\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="wwwroot\UploadFile\Advertise\20172148416.png" />
+    <None Include="wwwroot\UploadFile\Advertise\20174241523.jpg" />
+    <None Include="wwwroot\UploadFile\Advertise\20174247261.jpg" />
+    <None Include="wwwroot\UploadFile\Advertise\20174247352.jpg" />
+    <None Include="wwwroot\UploadFile\Advertise\20174247794.jpg" />
+    <None Include="wwwroot\UploadFile\Advertise\20174248680.jpg" />
+    <None Include="wwwroot\UploadFile\Advertise\2017472914.jpg" />
+    <None Include="wwwroot\UploadFile\Advertise\2017479396.gif" />
+    <None Include="wwwroot\UploadFile\Advertise\20177252144.jpg" />
+    <None Include="wwwroot\UploadFile\Advertise\20178317730.jpg" />
+    <None Include="wwwroot\UploadFile\Advertise\20178319708.jpg" />
+    <None Include="wwwroot\UploadFile\Article\20174247811.jpg" />
+    <None Include="wwwroot\UploadFile\Article\20174247811_s.jpg" />
+    <None Include="wwwroot\UploadFile\Article\20174252204.jpg" />
+    <None Include="wwwroot\UploadFile\Article\20174252204_s.jpg" />
+    <None Include="wwwroot\UploadFile\Article\20174261462.jpg" />
+    <None Include="wwwroot\UploadFile\Article\20174261462_s.jpg" />
+    <None Include="wwwroot\UploadFile\Article\20176121463.jpg" />
+    <None Include="wwwroot\UploadFile\Article\20176121463_s.jpg" />
+    <None Include="wwwroot\UploadFile\Article\2017672228.jpg" />
+    <None Include="wwwroot\UploadFile\Article\2017672228_s.jpg" />
+    <None Include="wwwroot\UploadFile\Article\2017697959.jpg" />
+    <None Include="wwwroot\UploadFile\Article\2017697959_s.jpg" />
+    <None Include="wwwroot\UploadFile\Article\20177254186.jpg" />
+    <None Include="wwwroot\UploadFile\Article\20177254186_s.jpg" />
+    <None Include="wwwroot\UploadFile\Article\20177285463.jpg" />
+    <None Include="wwwroot\UploadFile\Article\20177285463_s.jpg" />
+    <None Include="wwwroot\UploadFile\LawyerFirst\20178315005.jpg" />
+    <None Include="wwwroot\UploadFile\ueditor\image\20170802\6363728648538785737045319" />
+    <None Include="wwwroot\UploadFile\ueditor\image\20170802\6363728648541910838801982" />
+    <None Include="wwwroot\UploadFile\ueditor\image\20170802\6363728648545035931558645" />
+    <None Include="wwwroot\UploadFile\ueditor\image\20170802\6363728651265435482082869" />
+    <None Include="wwwroot\UploadFile\ueditor\image\20170802\6363728651268560583839532" />
+    <None Include="wwwroot\UploadFile\ueditor\image\20170802\6363728651271685685596195" />
+  </ItemGroup>
+
 </Project>

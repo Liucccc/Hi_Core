@@ -415,9 +415,9 @@ $.fn.GetWebControls = function (keyValue,ignore) {
         switch (type) {
             case "checkbox":
                 if ($("#" + id).is(":checked")) {
-                    reVal += "\"" + id + "\"" + ":" + "\"1\",";
+                    reVal += "\"" + id + "\"" + ":" + "\"true\",";
                 } else {
-                    reVal += "\"" + id + "\"" + ":" + "\"0\",";
+                    reVal += "\"" + id + "\"" + ":" + "\"false\",";
                 }
                 break;
             case "select":
