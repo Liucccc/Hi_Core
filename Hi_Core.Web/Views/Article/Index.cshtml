@@ -43,14 +43,15 @@
         </div>
     </div>
     <div class="toolbar">
-        <a class="btn btn-default lr-replace" id="lr-replace" onclick="reload()"><i class="fa fa-refresh"></i>&nbsp;刷新</a>
-        <a class="btn btn-default lr-Add" id="lr-Add" onclick="Add()"><i class="fa fa-plus"></i>&nbsp;新增</a>
-        <a class="btn btn-default lr-Edit" id="lr-Edit" onclick="Edit()"><i class="fa fa-pencil-square-o"></i>&nbsp;编辑</a>
-        <a class="btn btn-default lr-Del" id="lr-replace" onclick="Del()"><i class="fa fa-remove"></i>&nbsp;删除</a>
-        <a class="btn btn-default lr-Hot" id="lr-replace" onclick="Hot()"><i class="fa fa-plus"></i>&nbsp;热点</a>
-        <a class="btn btn-default lr-Recommond" id="lr-replace" onclick="Recommond()"><i class="fa fa-trash-o"></i>&nbsp;推荐</a>
-        <a class="btn btn-default lr-Alive" id="lr-replace" onclick="Alive()"><i class="fa fa-trash-o"></i>&nbsp;屏蔽</a>
-        <a class="btn btn-default lr-Layer" id="lr-replace" onclick="Layer()"><i class="fa fa-trash-o"></i>&nbsp;更改序号</a>
+        <a class="btn btn-default" id="lr-replace" onclick="reload()"><i class="fa fa-refresh"></i>&nbsp;刷新</a>
+        <a class="btn btn-default" id="lr-Add" onclick="Add()"><i class="fa fa-plus"></i>&nbsp;新增</a>
+        <a class="btn btn-default" id="lr-Edit" onclick="Edit()"><i class="fa fa-pencil-square-o"></i>&nbsp;编辑</a>
+        <a class="btn btn-default" id="lr-Del" onclick="Del()"><i class="fa fa-remove"></i>&nbsp;删除</a>
+        <a class="btn btn-default" id="lr-Hot" onclick="Hot()"><i class="fa fa-plus"></i>&nbsp;热点</a>
+        <a class="btn btn-default" id="lr-Recommond" onclick="Recommond()"><i class="fa fa-star"></i>&nbsp;推荐</a>
+        <a class="btn btn-default" id="lr-AliveFalse" onclick="AliveFalse()"><i class="fa fa-stop"></i>&nbsp;屏蔽</a>
+        <a class="btn btn-default" id="lr-AliveTrue" onclick="AliveTrue()"><i class="fa fa-play"></i>&nbsp;启用</a>
+        <a class="btn btn-default" id="lr-Layer" onclick="Layer()"><i class="fa fa-trash-o"></i>&nbsp;更改序号</a>
     </div>
 </div>
 @{
@@ -212,12 +213,26 @@
         }
     }
     //屏蔽
-    function Alive() {
+    function AliveFalse() {
         var id = $("#Article_gridTable").jqGridRowValue("Aid");
         if (checkedRow(id)) {
             $.fn.submitAjax({
                 target: "#Article_gridTable",
-                url: "/Article/Alive",
+                url: "/Article/AliveFalse",
+                param: { id: id },
+                success: function (data) {
+                    $("#Article_gridTable").trigger("reloadGrid");
+                }
+            });
+        }
+    }
+    //启用
+    function AliveTrue() {
+        var id = $("#Article_gridTable").jqGridRowValue("Aid");
+        if (checkedRow(id)) {
+            $.fn.submitAjax({
+                target: "#Article_gridTable",
+                url: "/Article/AliveTrue",
                 param: { id: id },
                 success: function (data) {
                     $("#Article_gridTable").trigger("reloadGrid");

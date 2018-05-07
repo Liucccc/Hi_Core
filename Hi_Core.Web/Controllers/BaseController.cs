@@ -15,7 +15,7 @@ namespace Hi_Core.Web.Controllers
         /// <returns></returns>
         protected virtual ActionResult Success(string message)
         {
-            return Json(new { IsSucceeded = true, message = message });
+            return Content(Newtonsoft.Json.JsonConvert.SerializeObject(new { IsSucceeded = true, Message = message }));
         }
         /// <summary>
         /// 返回失败消息
@@ -24,7 +24,7 @@ namespace Hi_Core.Web.Controllers
         /// <returns></returns>
         protected virtual ActionResult Error(string message)
         {
-            return Json(new { IsSucceeded = false, message = message });
+            return Content(Newtonsoft.Json.JsonConvert.SerializeObject(new { IsSucceeded = false, Message = message }));
         }
     }
 }

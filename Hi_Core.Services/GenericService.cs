@@ -76,6 +76,17 @@ namespace Hi_Core.Services
         }
 
         /// <summary>
+        /// 更新实体数据，更新条件是根据表达式
+        /// </summary>
+        /// <param name="UpdateColumns"></param>
+        /// <param name="where"></param>
+        /// <returns></returns>
+        public bool Update(Expression<Func<T, T>> UpdateColumns, Expression<Func<T, bool>> where)
+        {
+            return _repository.Update(UpdateColumns, where);
+        }
+
+        /// <summary>
         /// 删除数据
         /// </summary>
         /// <param name="entity">实体类</param>

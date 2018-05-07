@@ -59,18 +59,25 @@ namespace Hi_Core.Web.Controllers
 
         #region ==屏蔽==
         [HttpPost]
-        public IActionResult Alive(int id)
+        public IActionResult AliveFalse(int id)
         {
-            var data = _articleService.FindByClause(m => m.Aid == id);
-            if (data != null)
-                data.Alive = false;
-            else
-                return Error("未找到此项数据！");
-            var res = _articleService.Update(data);
+            var res = _articleService.Update(m => new ViewArticle() { Alive = false }, m => m.Aid == id);
             if (res)
                 return Success("屏蔽成功！");
             else
                 return Error("屏蔽失败！");
+        }
+        #endregion
+
+        #region ==启用==
+        [HttpPost]
+        public IActionResult AliveTrue(int id)
+        {
+            var res = _articleService.Update(m => new ViewArticle() { Alive = true }, m => m.Aid == id);
+            if (res)
+                return Success("启用成功！");
+            else
+                return Error("启用失败！");
         }
         #endregion
     }

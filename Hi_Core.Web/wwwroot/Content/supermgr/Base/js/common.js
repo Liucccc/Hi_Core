@@ -34,7 +34,7 @@ $.fn.getLayoutHeight = function () {
     }
 }
 //获取layout bottom底部距离
-$.fn.getLayoutBottomHeight=function() {
+$.fn.getLayoutBottomHeight = function () {
     return 52;  //底部距离预设52
 }
 //获取layout中grid刨除顶部高度（包括上下内边距）
@@ -46,7 +46,7 @@ $.fn.getGridTopHeight = function () {
     }
 }
 //获取layout内容区域高度
-$.fn.getLayoutContentHeight=function() {
+$.fn.getLayoutContentHeight = function () {
     return $.fn.getLayoutHeight() - $.fn.getLayoutBottomHeight();
 }
 //获取列表grid自适应高度
@@ -407,7 +407,7 @@ $.fn.ComboBoxTreeSetValue = function (value) {
     }
     return $select;
 };
-$.fn.GetWebControls = function (keyValue,ignore) {
+$.fn.GetWebControls = function (keyValue, ignore) {
     var reVal = "";
     $(this).find("input,select,textarea,.ui-select").not(ignore).each(function (r) {
         var id = $(this).attr("id");
@@ -462,7 +462,7 @@ $.fn.SetWebControls = function (data) {
         var id = $id.find("#" + key);
         if (id.attr("id")) {
             var type = id.attr("type");
-            
+
             if (id.hasClass("input-datepicker")) {
                 type = "datepicker";
             }
@@ -472,7 +472,7 @@ $.fn.SetWebControls = function (data) {
             var value = $.trim(data[key]).replace(/&nbsp;/g, "");
             switch (type) {
                 case "checkbox":
-                    if (value === 1||value === true) {
+                    if (value === 1 || value === true) {
                         id.attr("checked", "checked");
                         id.parent().addClass("checked");
                     } else {
@@ -532,7 +532,7 @@ $.fn.Contextmenu = function () {
                 showTimer = setTimeout(function () {
                     for (i = 0; i < oThis.parentNode.children.length; i++) {
                         oThis.parentNode.children[i].getElementsByTagName("ul")[0] &&
-                        (oThis.parentNode.children[i].getElementsByTagName("ul")[0].style.display = "none");
+                            (oThis.parentNode.children[i].getElementsByTagName("ul")[0].style.display = "none");
                     }
                     oUl[0].style.display = "block";
                     oUl[0].style.top = oThis.offsetTop + "px";
@@ -559,7 +559,7 @@ $.fn.Contextmenu = function () {
             hideTimer = setTimeout(function () {
                 for (i = 0; i < oThis.parentNode.children.length; i++) {
                     oThis.parentNode.children[i].getElementsByTagName("ul")[0] &&
-                    (oThis.parentNode.children[i].getElementsByTagName("ul")[0].style.display = "none");
+                        (oThis.parentNode.children[i].getElementsByTagName("ul")[0].style.display = "none");
                 }
             }, 300);
         };
@@ -684,12 +684,12 @@ $.fn.authorizeButton = function () {
 
     $.getJSON("/SysMgr/PermissionUserMgr/GetUserPermissionButtonsByModuleId", { moduleId: moduleId }, function (data) {
         if (data) {
-            $.each(data, function(i) {
+            $.each(data, function (i) {
                 $element.find("." + data[i].EnCode).attr("authorize", "yes");
             });
         }
         $element.find("[authorize=no]").remove();
-       
+
     });
 };
 $.fn.authorizeColModel = function () {
@@ -780,7 +780,7 @@ $.fn.modalOpen = function (options) {
         url: '',
         shade: 0.3,
         btn: ['确认', '关闭'],
-       // btnclass: ['btn btn-primary', 'btn btn-danger'],
+        // btnclass: ['btn btn-primary', 'btn btn-danger'],
         callBack: null,
         allowOverParent: false
     };
@@ -816,7 +816,7 @@ $.fn.modalConfirm = function (content, callBack) {
         icon: 3,
         title: "系统提示",
         btn: ['确认', '取消'],
-      //  btnclass: ['btn btn-primary', 'btn btn-danger'],
+        //  btnclass: ['btn btn-primary', 'btn btn-danger'],
     }, function () {
         callBack(true);
     }, function () {
@@ -843,7 +843,7 @@ $.fn.modalAlert = function (content, type) {
         icon: iconType,
         title: "系统提示",
         btn: ['确认'],
-      //  btnclass: ['btn btn-primary'],
+        //  btnclass: ['btn btn-primary'],
     });
 }
 $.fn.modalMsg = function (content, type) {
@@ -899,7 +899,7 @@ $.fn.submitForm = function (options) {
             type: "post",
             dataType: "json",
             success: function (data) {
-                if (data.IsSucceeded==true) {
+                if (data.IsSucceeded == true) {
                     options.success(data);
                     $.fn.modalMsg(data.Message, "success");
                     if (options.close == true) {
@@ -924,38 +924,39 @@ $.fn.submitForm = function (options) {
 }
 //提交ajax请求
 $.fn.submitAjax = function (options) {
-   
+
     App.blockUI({
         target: options.target,
         boxed: true,
         message: '加载中'//,
         // animate: true
     });
-        window.setTimeout(function () {
-            $.ajax({
-                url: options.url,
-                data: options.param,
-                type: "post",
-                dataType: "json",
-                success: function (data) {
-                    if (data.IsSucceeded == true) {
-                        options.success(data);
-                    } else {
-                        $.fn.modalAlert(data.Message, "danger");
-                    }
-                },
-                error: function (xmlHttpRequest, textStatus, errorThrown) {
-                    App.unblockUI(options.target);
-                    $.fn.modalMsg(errorThrown, "error");
-                },
-                beforeSend: function () {
-                    App.unblockUI(options.target);
-                },
-                complete: function () {
-                    App.unblockUI(options.target);
+    window.setTimeout(function () {
+        $.ajax({
+            url: options.url,
+            data: options.param,
+            type: "post",
+            dataType: "json",
+            success: function (data) {
+                if (data.IsSucceeded == true) {
+                    $.fn.modalMsg(data.Message, "success");
+                    options.success(data);
+                } else {
+                    $.fn.modalAlert(data.Message, "danger");
                 }
-            });
-        }, 500); 
+            },
+            error: function (xmlHttpRequest, textStatus, errorThrown) {
+                App.unblockUI(options.target);
+                $.fn.modalMsg(errorThrown, "error");
+            },
+            beforeSend: function () {
+                App.unblockUI(options.target);
+            },
+            complete: function () {
+                App.unblockUI(options.target);
+            }
+        });
+    }, 500);
 }
 $.fn.deleteForm = function (options) {
     var defaults = {
@@ -977,7 +978,7 @@ $.fn.deleteForm = function (options) {
                     type: "post",
                     dataType: "json",
                     success: function (data) {
-                        if (data.IsSucceeded==true) {
+                        if (data.IsSucceeded == true) {
                             options.success(data);
                             $.fn.modalMsg(data.Message, "success");
                         } else {
@@ -1179,7 +1180,7 @@ toDecimal = function (num) {
     num = Math.floor(num / 100).toString();
     if (cents < 10)
         cents = "0" + cents;
-    for (var i = 0; i < Math.floor((num.length - (1 + i)) / 3) ; i++)
+    for (var i = 0; i < Math.floor((num.length - (1 + i)) / 3); i++)
         num = num.substring(0, num.length - (4 * i + 3)) + "" +
             num.substring(num.length - (4 * i + 3));
     return (((sign) ? "" : "-") + num + "." + cents);
@@ -1360,7 +1361,7 @@ checkedRow = function (id) {
 };
 
 
-getQueryString=function(name) {
+getQueryString = function (name) {
     var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i");
     var r = window.location.search.substr(1).match(reg);
     if (r != null) return unescape(r[2]); return null;

@@ -103,14 +103,15 @@ namespace Hi_Core.Repositories
         /// <summary>
         /// 更新实体数据，更新条件是根据表达式
         /// </summary>
-        /// <param name="entity"></param>
+        /// <param name="UpdateColumns"></param>
+        /// <param name="where"></param>
         /// <returns></returns>
-        public bool Update(T entity, Expression<Func<T, bool>> UpdateColumns, Expression<Func<T, bool>> where)
+        public bool Update(Expression<Func<T, T>> UpdateColumns, Expression<Func<T, bool>> where)
         {
             using (var db = DbFactory.GetSqlSugarClient())
             {
                 //这种方式会以主键为条件
-                var i = db.Updateable<T>().UpdateColumns(entity).Where(where).ExecuteCommand();
+                var i = db.Updateable<T>().UpdateColumns(UpdateColumns).Where(where).ExecuteCommand();
                 return i > 0;
             }
         }
