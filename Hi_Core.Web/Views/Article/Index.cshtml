@@ -14,7 +14,7 @@
             </div>
             <label class="control-label col-sm-1">提交日期</label>
             <div class="col-sm-3">
-                @Html.DatePicker("Atime")
+                @Html.DaterangePicker("Atime", "提交日期")
             </div>
             @{
                 if (ViewBag.Kind == 5 || ViewBag.Kind == 6)
@@ -47,15 +47,20 @@
         <a class="btn btn-default" id="lr-Add" onclick="Add()"><i class="fa fa-plus"></i>&nbsp;新增</a>
         <a class="btn btn-default" id="lr-Edit" onclick="Edit()"><i class="fa fa-pencil-square-o"></i>&nbsp;编辑</a>
         <a class="btn btn-default" id="lr-Del" onclick="Del()"><i class="fa fa-remove"></i>&nbsp;删除</a>
-        <a class="btn btn-default" id="lr-Hot" onclick="Hot()"><i class="fa fa-plus"></i>&nbsp;热点</a>
-        <a class="btn btn-default" id="lr-Recommond" onclick="Recommond()"><i class="fa fa-star"></i>&nbsp;推荐</a>
-        <a class="btn btn-default" id="lr-AliveFalse" onclick="AliveFalse()"><i class="fa fa-stop"></i>&nbsp;屏蔽</a>
+        @{
+            if (ViewBag.Kind == 1 || ViewBag.Kind == 2 || ViewBag.Kind == 3 || ViewBag.Kind == 4 || ViewBag.Kind == 5 || ViewBag.Kind == 6 || ViewBag.Kind == 8)
+            {
+                <a class="btn btn-default" id="lr-Hot" onclick="Hot()"><i class="fa fa-flag"></i>&nbsp;热点</a>
+                <a class="btn btn-default" id="lr-Recommond" onclick="Recommend()"><i class="fa fa-star"></i>&nbsp;推荐</a>
+            }
+        }
+        <a class="btn btn-default" id="lr-AliveFalse" onclick="AliveFalse();"><i class="fa fa-stop"></i>&nbsp;屏蔽</a>
         <a class="btn btn-default" id="lr-AliveTrue" onclick="AliveTrue()"><i class="fa fa-play"></i>&nbsp;启用</a>
-        <a class="btn btn-default" id="lr-Layer" onclick="Layer()"><i class="fa fa-trash-o"></i>&nbsp;更改序号</a>
+        <a class="btn btn-default" id="lr-Layer" onclick="Layer()"><i class="fa fa-sort-numeric-desc"></i>&nbsp;更改序号</a>
     </div>
 </div>
 @{
-    Hi_Core.Domain.JQGridModel m = Hi_Core.Web.Models.ArticleGrid.Index();
+    Hi_Core.Domain.JQGridModel m = Hi_Core.Web.Models.ArticleGrid.Index(ViewBag.Kind);
     m.postData = new { queryJson = "{ Kind:" + ViewBag.Kind + "}" };
     @Html.JQGrid(m);
 }
@@ -72,82 +77,15 @@
             }).trigger('reloadGrid');
         });
     });
-    function loadGrid() {
-        //初始化
-        $(window).resize(function (e) {
-            window.setTimeout(function () {
-
-                $('#gridTable').setGridWidth(($('.gridPanel').width()));
-                $("#Article_gridTable").setGridHeight($.fn.getGridHeight(true));
-
-            }, 100);
-            e.stopPropagation();
-        });
-        var selectedRowIndex = 0;
-        $gridTable = $("#Article_gridTable");
-        $gridTable.jqGrid({
-            datatype: "json",
-            mtype: "POST",
-            url: "/Article/GetJQGridJson",
-            postData: { Ostatus: 0, s_hot: 0, s_recommend: 0, d1: "", d2: "", searchText: "", Kind: 51, Asid: "" },
-            height: $.fn.getGridHeight(true),
-            autowidth: true,
-            colModel: [
-                { label: "主键", name: "Aid", hidden: true },
-                { label: "标题", name: "Atitle", index: "Atitle", width: 300, align: "left" },
-                { label: "链接", name: "Url", index: "Url", width: 200, align: "left" },
-                { label: "来源", name: "Source", index: "Source", width: 70, align: "left" },
-                { label: "作者", name: "Author", index: "Author", width: 100, align: "center" },
-                {
-                    label: "提交日期", name: "Atime", index: "Atime", width: 150, align: "center",
-                    formatter: function (cellvalue, options, rowObject) {
-                        return formatDate(cellvalue, 'yyyy-MM-dd hh:mm:ss');
-                    }
-                },
-                {
-                    label: "热点文章", name: "Hot", index: "Hot", width: 80, align: "center",
-                    formatter: function (cellvalue, options, rowObject) {
-                        return cellvalue ? "<span class='label label-success'>√</span>" : "<span class='label label-danger'>×</span>";
-                    }
-                },
-                {
-                    label: "推荐文章", name: "Recommend", index: "Recommend", width: 80, align: "center",
-                    formatter: function (cellvalue, options, rowObject) {
-                        return cellvalue ? "<span class='label label-success'>√</span>" : "<span class='label label-danger'>×</span>";
-                    }
-                },
-                {
-                    label: "有效", name: "Alive", index: "Alive", width: 80, align: "center",
-                    formatter: function (cellvalue, options, rowObject) {
-                        return cellvalue ? "<span class='label label-success'>√</span>" : "<span class='label label-danger'>×</span>";
-                    }
-                },
-
-
-            ],
-            pager: "#gridPager",
-            sortname: 'Aid',
-            rowList: [10, 20, 50, 100, 500, 1000],
-            rowNum: "10",
-            sortorder: "desc",
-            rownumbers: true,
-            onSelectRow: function () {
-                selectedRowIndex = $("#" + this.id).getGridParam('selrow');
-            },
-            gridComplete: function () {
-                $("#" + this.id).setSelection(selectedRowIndex, false);
-            }
-        });
-    }
 
     //新增
     function Add() {
         $.fn.modalOpen({
-            id: "jobDetailForm",
-            title: '添加离婚知识',
+            id: "ArticleForm",
+            title: '添加',
             url: '/Article/Add?k=1',
-            width: "750px",
-            height: "550px",
+            width: "950px",
+            height: "750px",
             callBack: function (iframeId) {
                 top.frames[iframeId].AcceptClick();
             }
@@ -155,15 +93,14 @@
     }
     //编辑
     function Edit() {
-        var keyValue = $("#Article_gridTable").jqGridRowValue("Aid");
-        var taskName = $("#Article_gridTable").jqGridRowValue("TaskName");
-        if (checkedRow(keyValue)) {
+        var id = $("#Article_gridTable").jqGridRowValue("Aid");
+        if (checkedRow(id)) {
             $.fn.modalOpen({
-                id: "jobDetailForm",
-                title: '编辑【' + taskName + '】任务',
-                url: '/pages/supermgr/JobDetailForm.html?keyValue=' + keyValue,
-                width: "750px",
-                height: "550px",
+                id: "ArticleForm",
+                title: '编辑',
+                url: '/Article/Add?id=' + id,
+                width: "950px",
+                height: "750px",
                 callBack: function (iframeId) {
                     top.frames[iframeId].AcceptClick();
                 }
@@ -172,26 +109,27 @@
     }
     //删除
     function Del() {
-        var keyValue = $("#Article_gridTable").jqGridRowValue("Aid");
-        if (checkedRow(keyValue)) {
-            $.fn.confirmAjax({
-                msg: "注：您确定要【删除】该定时任务么？该删除操作会级联删除任务日志，请谨慎操作！",
-                url: "/SysMgr/SchedulerMgr/DeleteJobStatus",
-                param: { keyValue: keyValue },
+        var ids = $("#Article_gridTable").jqGridRowValue("Aid");
+        if (!!ids) {
+            $.fn.deleteForm({
+                url: "/Article/Del",
+                param: { ids: ids },
                 success: function (data) {
                     $("#Article_gridTable").trigger("reloadGrid");
                 }
-            });
+            })
+        } else {
+            $.fn.modalMsg("您没有选中任何项,请您选中后再操作。", "warning");
         }
     }
     //热点
     function Hot() {
-        var keyValue = $("#Article_gridTable").jqGridRowValue("Aid");
-        if (checkedRow(keyValue)) {
-            $.fn.confirmAjax({
-                msg: "注：您确定要【删除】该定时任务么？该删除操作会级联删除任务日志，请谨慎操作！",
-                url: "/SysMgr/SchedulerMgr/DeleteJobStatus",
-                param: { keyValue: keyValue },
+        var id = $("#Article_gridTable").jqGridRowValue("Aid");
+        if (checkedRow(id)) {
+            $.fn.submitAjax({
+                target: "#Article_gridTable",
+                url: "/Article/Hot",
+                param: { id: id },
                 success: function (data) {
                     $("#Article_gridTable").trigger("reloadGrid");
                 }
@@ -199,13 +137,13 @@
         }
     }
     //推荐
-    function Recommond() {
-        var keyValue = $("#Article_gridTable").jqGridRowValue("Aid");
-        if (checkedRow(keyValue)) {
-            $.fn.confirmAjax({
-                msg: "注：您确定要【删除】该定时任务么？该删除操作会级联删除任务日志，请谨慎操作！",
-                url: "/SysMgr/SchedulerMgr/DeleteJobStatus",
-                param: { keyValue: keyValue },
+    function Recommend() {
+        var id = $("#Article_gridTable").jqGridRowValue("Aid");
+        if (checkedRow(id)) {
+            $.fn.submitAjax({
+                target: "#Article_gridTable",
+                url: "/Article/Recommend",
+                param: { id: id },
                 success: function (data) {
                     $("#Article_gridTable").trigger("reloadGrid");
                 }
@@ -214,30 +152,34 @@
     }
     //屏蔽
     function AliveFalse() {
-        var id = $("#Article_gridTable").jqGridRowValue("Aid");
-        if (checkedRow(id)) {
+        var ids = $("#Article_gridTable").jqGridRowValue("Aid");
+        if (!!ids) {
             $.fn.submitAjax({
                 target: "#Article_gridTable",
                 url: "/Article/AliveFalse",
-                param: { id: id },
+                param: { ids: ids },
                 success: function (data) {
                     $("#Article_gridTable").trigger("reloadGrid");
                 }
             });
+        } else {
+            $.fn.modalMsg("您没有选中任何项,请您选中后再操作。", "warning");
         }
     }
     //启用
     function AliveTrue() {
-        var id = $("#Article_gridTable").jqGridRowValue("Aid");
-        if (checkedRow(id)) {
+        var ids = $("#Article_gridTable").jqGridRowValue("Aid");
+        if (!!ids) {
             $.fn.submitAjax({
                 target: "#Article_gridTable",
                 url: "/Article/AliveTrue",
-                param: { id: id },
+                param: { ids: ids },
                 success: function (data) {
                     $("#Article_gridTable").trigger("reloadGrid");
                 }
             });
+        } else {
+            $.fn.modalMsg("您没有选中任何项,请您选中后再操作。", "warning");
         }
     }
     //更改序号

@@ -6,7 +6,7 @@ using Hi_Core.Domain.Entities;
 
 namespace Hi_Core.Services
 {
-    public interface IArticleService: IDependency, IService<Hi_Core_Article>
+    public interface IViewArticleService: IDependency, IService<ViewArticle>
     {
     }
 }

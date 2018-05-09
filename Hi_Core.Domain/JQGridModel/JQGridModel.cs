@@ -40,7 +40,7 @@ namespace Hi_Core.Domain
         /// </summary>
         public List<JQGridColumnModel> colModel { get; set; }
 
-        private int _rowNum = 10;
+        private int _rowNum = 20;
         /// <summary>
         /// 一页显示多少条
         /// </summary>

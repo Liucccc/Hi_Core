@@ -24,6 +24,8 @@ namespace Hi_Core.Web
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddMvc();
+            services.AddTransient<IViewArticleRepository, ViewArticleRepository>();
+            services.AddTransient<IViewArticleService, ViewArticleService>();
             services.AddTransient<IArticleRepository, ArticleRepository>();
             services.AddTransient<IArticleService, ArticleService>();
             services.AddTransient<IArticleSortRepository, ArticleSortRepository>();

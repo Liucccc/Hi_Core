@@ -18,7 +18,7 @@ namespace Hi_Core.Domain.Entities
            /// Default:
            /// Nullable:False
            /// </summary>           
-           public long? Aid {get;set;}
+           public long Aid {get;set;}
 
            /// <summary>
            /// Desc:标题
@@ -60,14 +60,14 @@ namespace Hi_Core.Domain.Entities
            /// Default:
            /// Nullable:False
            /// </summary>           
-           public short? Kind {get;set;}
+           public short Kind {get;set;}
 
            /// <summary>
            /// Desc:序号
            /// Default:
            /// Nullable:False
            /// </summary>           
-           public long? Layer {get;set;}
+           public long Layer {get;set;}
 
            /// <summary>
            /// Desc:内容
@@ -81,7 +81,7 @@ namespace Hi_Core.Domain.Entities
            /// Default:
            /// Nullable:False
            /// </summary>           
-           public DateTime? Atime {get;set;}
+           public DateTime Atime {get;set;}
 
            /// <summary>
            /// Desc:图片
@@ -123,7 +123,7 @@ namespace Hi_Core.Domain.Entities
            /// Default:
            /// Nullable:False
            /// </summary>           
-           public long? Asid {get;set;}
+           public long Asid {get;set;}
 
            /// <summary>
            /// Desc:副标题

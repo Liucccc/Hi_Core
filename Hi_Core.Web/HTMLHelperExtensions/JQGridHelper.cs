@@ -82,7 +82,7 @@ namespace Hi_Core.Web
                             }
                             if(gridheight == 'windowauto'){
                                 var _x = $('.gridPanel').offset();
-                                gridheight = $(window).height() - _x.top - 90 -" + modelGrid.exceptheight + @";
+                                gridheight = $(window).height() - _x.top - 75 -" + modelGrid.exceptheight + @";
 
                                 if( " + modelGrid.minheight + @" > 0 && gridheight < " + modelGrid.minheight + @" )
                                 {
@@ -96,7 +96,7 @@ namespace Hi_Core.Web
                         }
                         if(gridheight == 'windowauto'){
                             var x = $('.gridPanel').offset();
-                            gridheight = $(window).height() - x.top - 90 -" + modelGrid.exceptheight + @";
+                            gridheight = $(window).height() - x.top - 75 -" + modelGrid.exceptheight + @";
                             if( " + modelGrid.minheight + @" > 0 && gridheight < " + modelGrid.minheight + @" )
                             {
                                 gridheight = " + modelGrid.minheight + @";
