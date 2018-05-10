@@ -66,6 +66,7 @@
 }
 
 <script>
+    var Kind = request("k");
     $(function () {
         //loadGrid();
         //查询事件
@@ -83,7 +84,7 @@
         $.fn.modalOpen({
             id: "ArticleForm",
             title: '添加',
-            url: '/Article/Add?k=1',
+            url: '/Article/Add?k=' + Kind,
             width: "950px",
             height: "750px",
             callBack: function (iframeId) {
@@ -98,7 +99,7 @@
             $.fn.modalOpen({
                 id: "ArticleForm",
                 title: '编辑',
-                url: '/Article/Add?id=' + id,
+                url: '/Article/Add?id=' + id + "&k=" + Kind,
                 width: "950px",
                 height: "750px",
                 callBack: function (iframeId) {
@@ -199,7 +200,7 @@
 
     //格式化显示状态
     function showStatus(cel, row, opt) {
-        return cel ? "<span class='label label-success'>√</span>" : "<span class='label label-danger'>×</span>";
+        return cel ? "<i class='fa fa-toggle-on'></i>" : "<i class='fa fa-toggle-off'></i>";
     }
 
     //格式化Pic1字段

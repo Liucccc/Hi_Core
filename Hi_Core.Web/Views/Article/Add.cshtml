@@ -1,7 +1,163 @@
 ﻿
 @{
     ViewData["Title"] = "Add";
-    Layout = "~/Views/Shared/_Index.cshtml";
+    Layout = "~/Views/Shared/_Form.cshtml";
 }
 
-<h2>Add</h2>
+<script>
+    var Kind = request("k");
+    var id = request("id");
+
+    $(function () {
+        initControl();
+    })
+
+    function initControl() {
+        //获取表单
+        if (!!id) {
+            $.fn.setForm({
+                url: "/Article/GetFromJson",
+                param: { id: id },
+                success: function (data) {
+                    data.Atime = formatDate(data.Atime, 'yyyy-MM-dd');
+                    $("#form1").SetWebControls(data);
+                    //$("#form1").find("#BeginTime,#AssemblyDll,#Class,#TaskType,#CronExpressionString").attr("disabled", 'disabled');
+                }
+            });
+        }
+    }
+
+    //保存表单
+    function AcceptClick() {
+        var postData = $("#form1").GetWebControls();
+        postData["Aid"] = id;
+        postData["Kind"] = Kind;
+        debugger
+        postData["Ainfo"] = UE.getEditor('Ainfo').getContent();
+        if (!$("#form1").Validform()) {
+            return false;
+        }
+        $.fn.submitForm({
+            url: "/Article/SaveForm",
+            param: postData,
+            loading: "正在保存数据...",
+            success: function () {
+                $.currentIframe().$("#Article_gridTable").resetSelection();
+                $.currentIframe().$("#Article_gridTable").trigger("reloadGrid");
+            }
+        });
+    }
+
+</script>
+<div id="form1">
+    <div class="tab-content" style="padding-top: 15px;">
+        <div id="BaseInfo" class="tab-pane active" style=" padding-right:30px;">
+            <table class="form">
+                <tr>
+                    <td class="formTitle">标题<font face="宋体">*</font></td>
+                    <td class="formValue">
+                        <input id="Atitle" type="text" class="form-control" placeholder="标题" isvalid="yes" checkexpession="NotNull" />
+                    </td>
+                </tr>
+                @{
+                    if (ViewBag.Kind == 5 || ViewBag.Kind == 6)
+                    {
+                        <tr>
+                            <td class="formTitle">分类<font face="宋体">*</font></td>
+                            <td class="formValue">
+                                @Html.ComboBox("Asid", "/ArticleSort/GetListJson", "{}", "Asid", "Stitle", "==请选择==", true, true)
+                            </td>
+                        </tr>
+                    }
+                }
+                @{
+                    if (ViewBag.Kind == 7 || ViewBag.Kind == 51)
+                    {
+                        <tr>
+                            <td class="formTitle">链接<font face="宋体">*</font></td>
+                            <td class="formValue">
+                                <input id="Url" type="text" class="form-control" placeholder="链接" isvalid="yes" checkexpession="NotNull" />
+                            </td>
+                        </tr>
+                    }
+                }
+                @{
+                    if (ViewBag.Kind == 1 || ViewBag.Kind == 2 || ViewBag.Kind == 3 || ViewBag.Kind == 4 || ViewBag.Kind == 5 || ViewBag.Kind == 6 || ViewBag.Kind == 8)
+                    {
+                        <tr>
+                            <td class="formTitle">来源<font face="宋体">*</font></td>
+                            <td class="formValue">
+                                <input id="Source" type="text" class="form-control" placeholder="来源" isvalid="yes" checkexpession="NotNull" />
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="formTitle">作者<font face="宋体">*</font></td>
+                            <td class="formValue">
+                                <input id="Author" type="text" class="form-control" placeholder="作者" isvalid="yes" checkexpession="NotNull" />
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="formTitle">提交日期<font face="宋体">*</font></td>
+                            <td class="formValue">
+                                @Html.DatePicker("Atime", DateTime.Now.ToString("yyyy-MM-dd"), true, true)
+                            </td>
+                        </tr>
+                    }
+                }
+                @{
+                    if (ViewBag.Kind > 50)
+                    {
+                        <tr>
+                            <td class="formTitle">图片</td>
+                            <td class="formValue">
+                                <input id="Pic1" type="text" class="form-control" placeholder="图片" />
+                            </td>
+                        </tr>
+                    }
+                }
+                @{
+                    if (ViewBag.Kind == 1 || ViewBag.Kind == 2 || ViewBag.Kind == 3 || ViewBag.Kind == 4 || ViewBag.Kind == 5 || ViewBag.Kind == 6 || ViewBag.Kind == 8)
+                    {
+                        <tr>
+                            <td class="formTitle">SEO副标题</td>
+                            <td class="formValue">
+                                <input id="ieTitle" type="text" class="form-control" placeholder="SEO副标题" />
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="formTitle">SEO关键字</td>
+                            <td class="formValue">
+                                <input id="seoKeywords" type="text" class="form-control" placeholder="SEO关键字" />
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="formTitle">SE0描述</td>
+                            <td class="formValue">
+                                <textarea rows="5" id="seoDescription" class="form-control" placeholder="SE0描述"></textarea>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="formTitle">概述</td>
+                            <td class="formValue">
+                                <textarea rows="5" id="Summary" class="form-control" placeholder="概述"></textarea>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="formTitle">内容</td>
+                            <td class="formValue">
+                                <textarea style="height:500px;" id="Ainfo"></textarea>
+                                <script>
+                                    $(function () {
+                                        var ue = UE.getEditor('Ainfo');
+                                    })
+                                </script>
+                            </td>
+                        </tr>
+                    }
+                }
+
+            </table>
+        </div>
+    </div>
+</div>
+

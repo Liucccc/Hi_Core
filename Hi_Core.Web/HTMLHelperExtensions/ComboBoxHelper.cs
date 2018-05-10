@@ -67,10 +67,11 @@ namespace Hi_Core.Web
         /// <param name="description">描述</param>
         /// <param name="allowSearch">搜索功能</param>
         /// <returns></returns>
-        public static HtmlString ComboBox(this IHtmlHelper helper, string id, string url, string param, string KeyValue, string KeyText, string description, bool allowSearch)
+        public static HtmlString ComboBox(this IHtmlHelper helper, string id, string url, string param, string KeyValue, string KeyText, string description, bool allowSearch, bool isNotNull = false)
         {
+            string strNotNull = isNotNull ? " isvalid='yes' checkexpession='NotNull' " : " ";
             string str = @"
-                <div id='" + id + @"' name='" + id + @"' type='select' class='ui-select'></div>
+                <div id='" + id + @"' name='" + id + @"' type='select' class='ui-select' " + strNotNull + @"></div>
                 <script>
                     $('#" + id + @"').ComboBox({
                         url: '" + url + @"',

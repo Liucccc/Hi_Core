@@ -8,6 +8,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Hi_Core.Services;
 using Hi_Core.Repositories;
+using UEditorNetCore;
 
 namespace Hi_Core.Web
 {
@@ -24,6 +25,12 @@ namespace Hi_Core.Web
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddMvc();
+            //返回json  大小写
+            services.AddMvc().AddJsonOptions(op => op.SerializerSettings.ContractResolver = new Newtonsoft.Json.Serialization.DefaultContractResolver());
+
+            //添加UEditorNetCore服务
+            services.AddUEditorService();
+
             services.AddTransient<IViewArticleRepository, ViewArticleRepository>();
             services.AddTransient<IViewArticleService, ViewArticleService>();
             services.AddTransient<IArticleRepository, ArticleRepository>();

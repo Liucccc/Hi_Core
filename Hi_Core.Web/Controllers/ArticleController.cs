@@ -73,9 +73,53 @@ namespace Hi_Core.Web.Controllers
         #endregion
 
         #region ==添加编辑==
-        public IActionResult Add(int? k, int? id)
+        public IActionResult Add(int k, int? id)
         {
+            ViewBag.Kind = k;
             return View();
+        }
+        #endregion
+
+        #region ==获得表单数据==
+        [HttpGet]
+        public IActionResult GetFromJson(int id)
+        {
+            var data = _articleService.FindById(id);
+            return Json(data);
+        }
+        #endregion
+
+        #region ==保存表单==
+        public IActionResult SaveForm(Hi_Core_Article m)
+        {
+            try
+            {
+                m.Alive = true;
+                if (m.Atime.ToString("yyyy-MM-dd") == "0001-01-01")
+                    m.Atime = DateTime.Now;
+                if (!string.IsNullOrEmpty(m.Url))
+                {
+                    if (m.Url.ToLower().IndexOf("http://") == -1 && m.Url.ToLower().IndexOf("https://") == -1)
+                        m.Url = "http://" + m.Url;
+                }
+
+                if (m.Aid > 0)
+                {
+                    //编辑
+                    bool res = _articleService.Update(m);
+                    return Success("编辑成功！");
+                }
+                else
+                {
+                    //添加
+                    long Aid = _articleService.Insert(m);
+                    return Success("添加成功！");
+                }
+            }
+            catch (Exception ex)
+            {
+                return Error(ex.Message);
+            }
         }
         #endregion
 
