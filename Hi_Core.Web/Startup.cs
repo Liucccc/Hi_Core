@@ -31,6 +31,13 @@ namespace Hi_Core.Web
             //添加UEditorNetCore服务
             services.AddUEditorService();
 
+            //跨域配置
+            services.AddCors(options =>
+            {
+                options.AddPolicy("AllowSpecificOrigin",
+                 builder => builder.WithOrigins("http://localhost:28708").AllowAnyHeader().AllowAnyOrigin().AllowAnyMethod());
+            });
+
             services.AddTransient<IViewArticleRepository, ViewArticleRepository>();
             services.AddTransient<IViewArticleService, ViewArticleService>();
             services.AddTransient<IArticleRepository, ArticleRepository>();
@@ -51,6 +58,8 @@ namespace Hi_Core.Web
             {
                 app.UseExceptionHandler("/Home/Error");
             }
+
+            app.UseCors("AllowSpecificOrigin");
 
             app.UseStaticFiles();
 

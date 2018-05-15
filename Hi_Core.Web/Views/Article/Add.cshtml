@@ -3,7 +3,10 @@
     ViewData["Title"] = "Add";
     Layout = "~/Views/Shared/_Form.cshtml";
 }
-
+<link href="/Content/plugins/jquery-file-upload/css/jquery.fileupload.css" rel="stylesheet" />
+<script src="/Content/plugins/jquery-file-upload/js/vendor/jquery.ui.widget.js"></script>
+<script src="/Content/plugins/jquery-file-upload/js/jquery.iframe-transport.js"></script>
+<script src="/Content/plugins/jquery-file-upload/js/jquery.fileupload.js"></script>
 <script>
     var Kind = request("k");
     var id = request("id");
@@ -110,7 +113,20 @@
                         <tr>
                             <td class="formTitle">图片</td>
                             <td class="formValue">
-                                <input id="Pic1" type="text" class="form-control" placeholder="图片" />
+                                <input id="Pic1" type="file" name="files[]" data-url="/api/Files/Pic" multiple>
+                                @*<input id="Pic1" type="button" class="form-control" placeholder="图片" />*@
+                                <script>
+                                    $(function () {
+                                        $('#Pic1').fileupload({
+                                            dataType: 'json',
+                                            done: function (e, data) {
+                                                $.each(data.result.files, function (index, file) {
+                                                    $('<p/>').text(file.name).appendTo(document.body);
+                                                });
+                                            }
+                                        });
+                                    });
+                                </script>
                             </td>
                         </tr>
                     }
