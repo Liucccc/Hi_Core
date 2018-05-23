@@ -35,7 +35,6 @@
         var postData = $("#form1").GetWebControls();
         postData["Aid"] = id;
         postData["Kind"] = Kind;
-        debugger
         postData["Ainfo"] = UE.getEditor('Ainfo').getContent();
         if (!$("#form1").Validform()) {
             return false;
@@ -54,7 +53,7 @@
 </script>
 <div id="form1">
     <div class="tab-content" style="padding-top: 15px;">
-        <div id="BaseInfo" class="tab-pane active" style=" padding-right:30px;">
+        <div id="BaseInfo" class="tab-pane active" style="padding-right:30px;">
             <table class="form">
                 <tr>
                     <td class="formTitle">标题<font face="宋体">*</font></td>

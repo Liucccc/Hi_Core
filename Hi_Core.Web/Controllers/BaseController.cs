@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Filters;
 
 namespace Hi_Core.Web.Controllers
 {
@@ -25,6 +26,18 @@ namespace Hi_Core.Web.Controllers
         protected virtual ActionResult Error(string message)
         {
             return Content(Newtonsoft.Json.JsonConvert.SerializeObject(new { IsSucceeded = false, Message = message }));
+        }
+
+        public override void OnActionExecuting(ActionExecutingContext filterContext)
+        {
+            byte[] result;
+            filterContext.HttpContext.Session.TryGetValue("Hi_Core_adminUsers", out result);
+            if (result == null)
+            {
+                filterContext.Result = new RedirectResult("/Account/Login");
+                return;
+            }
+            base.OnActionExecuting(filterContext);
         }
     }
 }

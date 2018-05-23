@@ -8,7 +8,7 @@ using Hi_Core.Web.Models;
 
 namespace Hi_Core.Web.Controllers
 {
-    public class HomeController : Controller
+    public class HomeController : BaseController
     {
         public IActionResult Index()
         {

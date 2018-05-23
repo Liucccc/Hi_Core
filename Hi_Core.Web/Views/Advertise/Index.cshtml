@@ -1,0 +1,66 @@
+﻿
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Form.cshtml";
+}
+
+<div class="box-body" id="form1">
+    <table>
+        <tr>
+            <th class="formTitle">图片</th>
+            <td class="formValue input-group">
+                <input type="file" id="Pic1" name="Pic1" />
+            </td>
+        </tr>
+        @{
+            if (ViewBag.Kind == 0)
+            {
+                <tr>
+                    <th class="formTitle">链接</th>
+                    <td class="formValue input-group">
+                        <input id="Url" type="text" class="form-control" placeholder="www.baidu.com" isvalid="yes" checkexpession="NotNull" />
+                    </td>
+                </tr>
+            }
+        }
+
+    </table>
+</div>
+<div class="box-footer">
+    <button type="submit" class="btn btn-success">保存</button>
+</div>
+<script>
+    var id = request("k");
+
+    $(function () {
+        initControl();
+    })
+
+    function initControl() {
+        //获取表单
+        if (!!id) {
+            $.fn.setForm({
+                url: "/Advertise/GetFromJson",
+                param: { id: id },
+                success: function (data) {
+                    $("#form1").SetWebControls(data);
+                }
+            });
+        }
+    }
+
+    //保存表单
+    function AcceptClick() {
+        var postData = $("#form1").GetWebControls();
+        postData["Aid"] = id;
+        if (!$("#form1").Validform()) {
+            return false;
+        }
+        $.fn.submitForm({
+            url: "/Advertise/SaveForm",
+            param: postData,
+            loading: "正在保存数据..."
+        });
+    }
+
+</script>

@@ -23,6 +23,7 @@ namespace Hi_Core.Web.Controllers
         {
             //return Json(new { type = 2, message = "用户名密码错误！" });
             //var msg = await a.a();
+            HttpContext.Session.Set("Hi_Core_adminUsers", Hi_Core.Common.ByteConvertHelper.Object2Bytes("aaa"));
             return Json(new { type = 1, message = "" });
         }
     }

@@ -25,6 +25,7 @@ namespace Hi_Core.Web
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddMvc();
+            services.AddSession();
             //返回json  大小写
             services.AddMvc().AddJsonOptions(op => op.SerializerSettings.ContractResolver = new Newtonsoft.Json.Serialization.DefaultContractResolver());
 
@@ -44,6 +45,8 @@ namespace Hi_Core.Web
             services.AddTransient<IArticleService, ArticleService>();
             services.AddTransient<IArticleSortRepository, ArticleSortRepository>();
             services.AddTransient<IArticleSortService, ArticleSortService>();
+            services.AddTransient<IAdvertiseRepository, AdvertiseRepository>();
+            services.AddTransient<IAdvertiseService, AdvertiseService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -63,12 +66,14 @@ namespace Hi_Core.Web
 
             app.UseStaticFiles();
 
+            app.UseSession();
             app.UseMvc(routes =>
             {
                 routes.MapRoute(
                     name: "default",
                     template: "{controller=Account}/{action=Login}/{id?}");
             });
+
         }
     }
 }
