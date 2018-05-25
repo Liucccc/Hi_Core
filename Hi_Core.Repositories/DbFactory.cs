@@ -19,7 +19,7 @@ namespace Hi_Core.Repositories
             var db = new SqlSugarClient(new ConnectionConfig()
             {
                 ConnectionString = Config.ConnectionString, //必填
-                DbType = DbType.SqlServer, //必填
+                DbType = DbType.MySql, //必填
                 IsAutoCloseConnection = true, //默认false
                 InitKeyType = InitKeyType.SystemTable//默认SystemTable
             }); 

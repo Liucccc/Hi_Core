@@ -13,7 +13,7 @@ namespace Hi_Core.Repositories
         /// <summary>
         /// 数据库连接字符串(私有字段)
         /// </summary>
-        private static readonly string _connectionString = AppSetting.GetConfig("ConnectionStrings:SqlServerConnString");
+        private static readonly string _connectionString = AppSetting.GetConfig("ConnectionStrings:MySqlConnection");
         /// <summary>
         /// 数据库连接字符串(公有属性)
         /// </summary>
