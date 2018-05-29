@@ -1,0 +1,61 @@
+﻿
+@{
+    ViewData["Title"] = "Add";
+    Layout = "~/Views/Shared/_Form.cshtml";
+}
+<script>
+    var Kind = request("k");
+    var id = request("id");
+
+    $(function () {
+        initControl();
+    })
+
+    function initControl() {
+        //获取表单
+        if (!!id) {
+            $.fn.setForm({
+                url: "/ArticleSort/GetFromJson",
+                param: { id: id },
+                success: function (data) {
+                    $("#form1").SetWebControls(data);
+                }
+            });
+        }
+    }
+
+    //保存表单
+    function AcceptClick() {
+        var postData = $("#form1").GetWebControls();
+        postData["Asid"] = id;
+        postData["Kind"] = Kind;
+        if (!$("#form1").Validform()) {
+            return false;
+        }
+        $.fn.submitForm({
+            url: "/ArticleSort/SaveForm",
+            param: postData,
+            loading: "正在保存数据...",
+            success: function () {
+                $.currentIframe().$("#ArticleSort_gridTable").resetSelection();
+                $.currentIframe().$("#ArticleSort_gridTable").trigger("reloadGrid");
+            }
+        });
+    }
+
+</script>
+<div id="form1">
+    <div class="tab-content" style="padding-top: 15px;">
+        <div id="BaseInfo" class="tab-pane active" style="padding-right:30px;">
+            <table class="form">
+                <tr>
+                    <td class="formTitle">名称<font face="宋体">*</font></td>
+                    <td class="formValue">
+                        <input id="Stitle" type="text" class="form-control" placeholder="名称" isvalid="yes" checkexpession="NotNull" />
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
+</div>
+

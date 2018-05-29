@@ -47,6 +47,8 @@ namespace Hi_Core.Web
             services.AddTransient<IArticleSortService, ArticleSortService>();
             services.AddTransient<IAdvertiseRepository, AdvertiseRepository>();
             services.AddTransient<IAdvertiseService, AdvertiseService>();
+            services.AddTransient<IInfoRepository, InfoRepository>();
+            services.AddTransient<IInfoService, InfoService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

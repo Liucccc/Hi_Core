@@ -106,6 +106,7 @@ namespace Hi_Core.Web.Controllers
                 if (m.Aid > 0)
                 {
                     //编辑
+                    m.Layer = _articleService.FindById(m.Aid).Layer;
                     bool res = _articleService.Update(m);
                     return Success("编辑成功！");
                 }
@@ -126,7 +127,8 @@ namespace Hi_Core.Web.Controllers
         #region ==删除==
         public IActionResult Del(string ids)
         {
-            var res = _articleService.Delete(m => ids.Contains(m.Aid.ToString()));
+            string[] id = ids.Split(',');
+            var res = _articleService.Delete(m => id.Contains(m.Aid.ToString()));
             if (res)
                 return Success("删除成功！");
             else
@@ -172,7 +174,8 @@ namespace Hi_Core.Web.Controllers
         [HttpPost]
         public IActionResult AliveFalse(string ids)
         {
-            var res = _articleService.Update(m => new Hi_Core_Article() { Alive = false }, m => ids.Contains(m.Aid.ToString()));
+            string[] id = ids.Split(',');
+            var res = _articleService.Update(m => new Hi_Core_Article() { Alive = false }, m => id.Contains(m.Aid.ToString()));
             if (res)
                 return Success("屏蔽成功！");
             else
@@ -184,7 +187,8 @@ namespace Hi_Core.Web.Controllers
         [HttpPost]
         public IActionResult AliveTrue(string ids)
         {
-            var res = _articleService.Update(m => new Hi_Core_Article() { Alive = true }, m => ids.Contains(m.Aid.ToString()));
+            string[] id = ids.Split(',');
+            var res = _articleService.Update(m => new Hi_Core_Article() { Alive = true }, m => id.Contains(m.Aid.ToString()));
             if (res)
                 return Success("启用成功！");
             else

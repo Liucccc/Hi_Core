@@ -1,0 +1,63 @@
+﻿
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Form.cshtml";
+}
+
+
+<script>
+    var id = request("iid");
+
+    //保存表单
+    function AcceptClick() {
+        var postData = $("#form1").GetWebControls();
+        postData["Iid"] = id;
+        if (!$("#form1").Validform()) {
+            return false;
+        }
+        $.fn.submitForm({
+            url: "/Other/SaveForm",
+            param: postData,
+            loading: "正在保存数据...",
+            success: function () {
+                //$.currentIframe().$("#ArticleSort_gridTable").resetSelection();
+                //$.currentIframe().$("#ArticleSort_gridTable").trigger("reloadGrid");
+            }
+        });
+    }
+
+</script>
+<div id="form1">
+    <div class="tab-content" style="padding-top: 15px;">
+        <div id="BaseInfo" class="tab-pane active" style="padding-right:30px;">
+            <table class="form">
+                <tr>
+
+                    <td class="formTitle">@ViewBag.m.Ititle<font face="宋体">*</font></td>
+                    <td class="formValue">
+                        @{
+                            if (ViewBag.m.Type == 1)
+                            {
+                                <input id="Iinfo" type="text" class="form-control" isvalid="yes" checkexpession="NotNull" value="@ViewBag.m.Iinfo" />
+                            }
+                            else if (ViewBag.m.Type == 3)
+                            {
+                                <textarea rows="5" id="Iinfo" class="form-control" isvalid="yes" checkexpession="NotNull" value="@ViewBag.m.Iinfo"></textarea>
+                            }
+                            else
+                            {
+                                <textarea style="height:500px;" id="Iinfo">@ViewBag.m.Iinfo</textarea>
+                                <script>
+                                    $(function () {
+                                        var ue = UE.getEditor('Iinfo');
+                                    })
+                                </script>
+                            }
+                        }
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
+</div>
+

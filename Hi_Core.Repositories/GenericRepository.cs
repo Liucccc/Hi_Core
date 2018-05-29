@@ -110,7 +110,6 @@ namespace Hi_Core.Repositories
         {
             using (var db = DbFactory.GetSqlSugarClient())
             {
-                //这种方式会以主键为条件
                 var i = db.Updateable<T>().UpdateColumns(UpdateColumns).Where(where).ExecuteCommand();
                 return i > 0;
             }

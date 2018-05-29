@@ -1,0 +1,148 @@
+﻿
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Index.cshtml";
+}
+
+<div class="center-Panel" style="overflow-x: hidden">
+    <input type="hidden" id="Kind" value="@ViewBag.Kind">
+    <div class="panel panel-default">
+        <div class="panel-body">
+            <label class="control-label  col-sm-1">名称</label>
+            <div class="col-sm-3">
+                <input type="text" id="Stitle" class="form-control" placeholder="名称">
+            </div>
+            <div class="col-sm-3">
+                <input type="checkbox" id="Alive" /><label for="Alive">屏蔽</label>
+            </div>
+            <div class="col-sm-4 text-right">
+                <a id="btn_Search" class="btn btn-primary lr-search"><i class="fa fa-search "></i>&nbsp;查询</a>
+            </div>
+        </div>
+    </div>
+    <div class="toolbar">
+        <a class="btn btn-default" id="lr-replace" onclick="reload()"><i class="fa fa-refresh"></i>&nbsp;刷新</a>
+        <a class="btn btn-default" id="lr-Add" onclick="Add()"><i class="fa fa-plus"></i>&nbsp;新增</a>
+        <a class="btn btn-default" id="lr-Edit" onclick="Edit()"><i class="fa fa-pencil-square-o"></i>&nbsp;编辑</a>
+        <a class="btn btn-default" id="lr-Del" onclick="Del()"><i class="fa fa-remove"></i>&nbsp;删除</a>
+        <a class="btn btn-default" id="lr-AliveFalse" onclick="AliveFalse();"><i class="fa fa-stop"></i>&nbsp;屏蔽</a>
+        <a class="btn btn-default" id="lr-AliveTrue" onclick="AliveTrue()"><i class="fa fa-play"></i>&nbsp;启用</a>
+        <a class="btn btn-default" id="lr-Layer" onclick="Layer()"><i class="fa fa-sort-numeric-desc"></i>&nbsp;更改序号</a>
+    </div>
+</div>
+@{
+    Hi_Core.Domain.JQGridModel m = Hi_Core.Web.Models.ArticleSortGrid.Index();
+    m.postData = new { queryJson = "{ Kind:" + ViewBag.Kind + "}" };
+    @Html.JQGrid(m);
+}
+
+<script>
+    var Kind = request("k");
+    $(function () {
+        //loadGrid();
+        //查询事件
+        $("#btn_Search").click(function () {
+            var queryJson = $(".center-Panel").GetWebControls();
+            $("#ArticleSort_gridTable").jqGrid('setGridParam', {
+                postData: { queryJson: JSON.stringify(queryJson) },
+                page: 1
+            }).trigger('reloadGrid');
+        });
+    });
+
+    //新增
+    function Add() {
+        $.fn.modalOpen({
+            id: "ArticleSortForm",
+            title: '添加',
+            url: '/ArticleSort/Add?k=' + Kind,
+            width: "950px",
+            height: "750px",
+            callBack: function (iframeId) {
+                top.frames[iframeId].AcceptClick();
+            }
+        });
+    }
+    //编辑
+    function Edit() {
+        var id = $("#ArticleSort_gridTable").jqGridRowValue("Asid");
+        if (checkedRow(id)) {
+            $.fn.modalOpen({
+                id: "ArticleSortForm",
+                title: '编辑',
+                url: '/ArticleSort/Add?id=' + id + "&k=" + Kind,
+                width: "950px",
+                height: "750px",
+                callBack: function (iframeId) {
+                    top.frames[iframeId].AcceptClick();
+                }
+            });
+        }
+    }
+    //删除
+    function Del() {
+        var ids = $("#ArticleSort_gridTable").jqGridRowValue("Asid");
+        if (!!ids) {
+            $.fn.deleteForm({
+                url: "/ArticleSort/Del",
+                param: { ids: ids },
+                success: function (data) {
+                    $("#ArticleSort_gridTable").trigger("reloadGrid");
+                }
+            })
+        } else {
+            $.fn.modalMsg("您没有选中任何项,请您选中后再操作。", "warning");
+        }
+    }
+    //屏蔽
+    function AliveFalse() {
+        var ids = $("#ArticleSort_gridTable").jqGridRowValue("Asid");
+        if (!!ids) {
+            $.fn.submitAjax({
+                target: "#ArticleSort_gridTable",
+                url: "/ArticleSort/AliveFalse",
+                param: { ids: ids },
+                success: function (data) {
+                    $("#ArticleSort_gridTable").trigger("reloadGrid");
+                }
+            });
+        } else {
+            $.fn.modalMsg("您没有选中任何项,请您选中后再操作。", "warning");
+        }
+    }
+    //启用
+    function AliveTrue() {
+        var ids = $("#ArticleSort_gridTable").jqGridRowValue("Asid");
+        if (!!ids) {
+            $.fn.submitAjax({
+                target: "#ArticleSort_gridTable",
+                url: "/ArticleSort/AliveTrue",
+                param: { ids: ids },
+                success: function (data) {
+                    $("#ArticleSort_gridTable").trigger("reloadGrid");
+                }
+            });
+        } else {
+            $.fn.modalMsg("您没有选中任何项,请您选中后再操作。", "warning");
+        }
+    }
+    //更改序号
+    function Layer() {
+        var keyValue = $("#ArticleSort_gridTable").jqGridRowValue("Asid");
+        if (checkedRow(keyValue)) {
+            $.fn.confirmAjax({
+                msg: "注：您确定要【删除】该定时任务么？该删除操作会级联删除任务日志，请谨慎操作！",
+                url: "/SysMgr/SchedulerMgr/DeleteJobStatus",
+                param: { keyValue: keyValue },
+                success: function (data) {
+                    $("#ArticleSort_gridTable").trigger("reloadGrid");
+                }
+            });
+        }
+    }
+
+    //格式化显示状态
+    function showStatus(cel, row, opt) {
+        return cel ? "<i class='fa fa-toggle-on'></i>" : "<i class='fa fa-toggle-off'></i>";
+    }
+</script>

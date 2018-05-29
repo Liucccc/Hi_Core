@@ -14,7 +14,7 @@ namespace Hi_Core.Web.Controllers
         /// </summary>
         /// <param name="message">消息</param>
         /// <returns></returns>
-        protected virtual ActionResult Success(string message)
+        protected virtual IActionResult Success(string message)
         {
             return Content(Newtonsoft.Json.JsonConvert.SerializeObject(new { IsSucceeded = true, Message = message }));
         }
@@ -23,7 +23,7 @@ namespace Hi_Core.Web.Controllers
         /// </summary>
         /// <param name="message">消息</param>
         /// <returns></returns>
-        protected virtual ActionResult Error(string message)
+        protected virtual IActionResult Error(string message)
         {
             return Content(Newtonsoft.Json.JsonConvert.SerializeObject(new { IsSucceeded = false, Message = message }));
         }
