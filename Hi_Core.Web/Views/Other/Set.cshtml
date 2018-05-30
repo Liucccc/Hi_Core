@@ -1,0 +1,127 @@
+﻿
+@{
+    ViewData["Title"] = "other";
+    Layout = "~/Views/Shared/_Form.cshtml";
+}
+
+<div class="nav-tabs-custom">
+    <ul class="nav nav-tabs">
+        <li class="active"><a href="#tab_1" data-toggle="tab">网站基本设置</a></li>
+        <li><a href="#tab_2" data-toggle="tab">SEO设置</a></li>
+    </ul>
+    <div class="tab-content" id="form1">
+        <div class="tab-pane active" id="tab_1">
+            <form role="form">
+                <div class="box-body">
+                    <table class="form">
+                        @{
+                            foreach (var item in ViewBag.m)
+                            {
+                                if (item.Iid < 100)
+                                {
+                                    <tr>
+                                        <th class="formTitle" style="width:130px;">@item.Ititle<font face="宋体">*</font></th>
+                                        <td class="formValue">
+                                            @if (@item.Type == 1)
+                                            {
+                                                <input id="@item.Iid" type="text" class="form-control" isvalid="yes" checkexpession="NotNull" value="@item.Iinfo" />
+                                            }
+                                            else if (@item.Type == 3)
+                                            {
+                                                <textarea rows="5" id="@item.Iid" class="form-control" isvalid="yes" checkexpession="NotNull">@item.Iinfo</textarea>
+                                            }
+                                            else
+                                            {
+                                                <textarea style="height:500px;" id="@item.Iid">@item.Iinfo</textarea>
+                                                <script>
+                                                    $(function () {
+                                                        var ue = UE.getEditor('@item.Iid');
+                                                    })
+                                                </script>
+                                            }
+
+                                        </td>
+                                    </tr>
+                                }
+                            }
+                        }
+                    </table>
+                </div>
+                <!-- /.box-body -->
+            </form>
+        </div>
+        <!-- /.tab-pane -->
+        <div class="tab-pane" id="tab_2">
+            <form role="form">
+                <div class="box-body">
+                    <table class="form">
+                        @{
+                            foreach (var item in ViewBag.m)
+                            {
+                                if (item.Iid > 200 && item.Iid < 300)
+                                {
+                                    <tr>
+                                        <th class="formTitle" style="width:130px;">@item.Ititle<font face="宋体">*</font></th>
+                                        <td class="formValue">
+                                            @if (@item.Type == 1)
+                                            {
+                                                <input id="@item.Iid" type="text" class="form-control" isvalid="yes" checkexpession="NotNull" value="@item.Iinfo" />
+                                            }
+                                            else if (@item.Type == 3)
+                                            {
+                                                <textarea rows="5" id="@item.Iid" class="form-control" isvalid="yes" checkexpession="NotNull">@item.Iinfo</textarea>
+                                            }
+                                            else
+                                            {
+                                                <textarea style="height:500px;" id="@item.Iid">@item.Iinfo</textarea>
+                                                <script>
+                                                    $(function () {
+                                                        var ue = UE.getEditor('@item.Iid');
+                                                    })
+                                                </script>
+                                            }
+
+                                        </td>
+                                    </tr>
+                                }
+                            }
+                        }
+                    </table>
+
+
+                </div>
+                <!-- /.box-body -->
+
+            </form>
+        </div>
+        <!-- /.tab-pane -->
+    </div>
+    <div class="box-footer">
+        <button type="submit" class="btn btn-success" onclick="AcceptClick()">保存</button>
+    </div>
+    <!-- /.tab-content -->
+</div>
+
+<script>
+    //保存表单
+    function AcceptClick() {
+        var postData = $("#form1").GetWebControls();
+        if (!$("#form1").Validform()) {
+            return false;
+        }
+        console.log(postData);
+        //if (postData["Iinfo"] == undefined) {
+        //    postData["Iinfo"] = UE.getEditor('Iinfo').getContent();
+        //}
+        //$.fn.submitForm({
+        //    url: "/Other/SaveForm",
+        //    param: postData,
+        //    loading: "正在保存数据...",
+        //    success: function () {
+        //        //$.currentIframe().$("#ArticleSort_gridTable").resetSelection();
+        //        //$.currentIframe().$("#ArticleSort_gridTable").trigger("reloadGrid");
+        //    }
+        //});
+    }
+</script>
+

@@ -32,11 +32,11 @@ namespace Hi_Core.Web.Controllers
         {
             byte[] result;
             filterContext.HttpContext.Session.TryGetValue("Hi_Core_adminUsers", out result);
-            if (result == null)
-            {
-                filterContext.Result = new RedirectResult("/Account/Login");
-                return;
-            }
+            //if (result == null)
+            //{
+            //    filterContext.Result = new RedirectResult("/Account/Login");
+            //    return;
+            //}
             base.OnActionExecuting(filterContext);
         }
     }

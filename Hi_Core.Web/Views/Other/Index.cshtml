@@ -15,6 +15,9 @@
         if (!$("#form1").Validform()) {
             return false;
         }
+        if (postData["Iinfo"] == undefined) {
+            postData["Iinfo"] = UE.getEditor('Iinfo').getContent();
+        }
         $.fn.submitForm({
             url: "/Other/SaveForm",
             param: postData,
@@ -42,7 +45,7 @@
                             }
                             else if (ViewBag.m.Type == 3)
                             {
-                                <textarea rows="5" id="Iinfo" class="form-control" isvalid="yes" checkexpession="NotNull" value="@ViewBag.m.Iinfo"></textarea>
+                                <textarea rows="5" id="Iinfo" class="form-control" isvalid="yes" checkexpession="NotNull">@ViewBag.m.Iinfo</textarea>
                             }
                             else
                             {
@@ -58,6 +61,9 @@
                 </tr>
             </table>
         </div>
+    </div>
+    <div class="box-footer">
+        <button type="submit" class="btn btn-success" onclick="AcceptClick()">保存</button>
     </div>
 </div>
 
